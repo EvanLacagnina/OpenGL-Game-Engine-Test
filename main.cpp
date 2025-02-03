@@ -57,7 +57,7 @@ int main() {
 	objs.push_back(Cube(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 0.1f, 0.1f), redTexture));
 	objs.push_back(Cube(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 2.0f, 0.1f), greenTexture));
 	objs.push_back(Cube(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 2.0f), blueTexture));
-
+	;
 
 	if(window != NULL){
 		Renderer::render(window, objs);
