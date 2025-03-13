@@ -15,9 +15,11 @@ int main() {
 	GLFWwindow* window = Renderer::init();
 
 	unsigned int tileTexture = Texture::genTexture("Untitled.jpg");
+	//unsigned int cubeTileTexture = Texture::genTexture("cubeTileTexture.jpg");
 	unsigned int brickTexture = Texture::genTexture("Brick.png");
 	unsigned int ceilingTileTexture = Texture::genTexture("Ceiling Tile.png");
 	unsigned int woodTexture = Texture::genTexture("Wood.png");
+	//unsigned int cubeWoodTexture = Texture::genTexture("cubeWoodTexture.jpg");
 	unsigned int redTexture = Texture::genTexture("Red.png");
 	unsigned int greenTexture = Texture::genTexture("Green.png");
 	unsigned int blueTexture = Texture::genTexture("Blue.png");
@@ -57,6 +59,8 @@ int main() {
 	objs.push_back(Cube(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 0.1f, 0.1f), redTexture));
 	objs.push_back(Cube(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 2.0f, 0.1f), greenTexture));
 	objs.push_back(Cube(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 2.0f), blueTexture));
+
+	objs.push_back(Cube(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture));
 	;
 
 	if(window != NULL){

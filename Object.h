@@ -24,10 +24,13 @@ private:
 
 protected:
 	std::vector<float> vertices;
+	std::vector<unsigned int> indices;
 	unsigned int VBO;
+	unsigned int VAO;
+	unsigned int EBO;
 
 public:
-	Object(std::vector<float> vertices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices);
+	Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices);
 
 	unsigned int getTexture();
 
@@ -43,6 +46,9 @@ public:
 
 	int getNumVertices();
 	std::vector<float> getVertices();
+	std::vector<unsigned int> getIndices();
 	float getVertex(int i);
 	unsigned int getVBO();
+	unsigned int getVAO();
+	unsigned int getEBO();
 };

@@ -1,15 +1,33 @@
 #include "Object.h"
 #include "Renderer.h"
 
-Object::Object(std::vector<float> vertices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices) {
+Object::Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices) {
 	Object::vertices = vertices;
+	Object::indices = indices;
 	Object::pos = pos;
 	Object::rot = rot;
 	Object::scale = scale;
 	Object::texture = tex;
 	Object::numVertices = numVertices;
+
 	glGenBuffers(1, &VBO);
-	glBufferData(VBO, Object::vertices.size() * sizeof(float), &Object::vertices[0], GL_STATIC_DRAW);
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+
+	glBufferData(GL_ARRAY_BUFFER, Object::vertices.size() * sizeof(float), &Object::vertices[0], GL_STATIC_DRAW);
 }
 
 unsigned int Object::getTexture() {
@@ -62,10 +80,22 @@ std::vector<float> Object::getVertices() {
 	return Object::vertices;
 }
 
+std::vector<unsigned int> Object::getIndices() {
+	return Object::indices;
+}
+
 float Object::getVertex(int i) {
 	return Object::vertices[i];
 }
 
 unsigned int Object::getVBO() {
 	return Object::VBO;
+}
+
+unsigned int Object::getVAO() {
+	return Object::VAO;
+}
+
+unsigned int Object::getEBO() {
+	return Object::EBO;
 }

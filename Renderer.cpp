@@ -75,7 +75,7 @@ void cursor_position_callback(GLFWwindow* window, double xPos, double yPos) {
 	mouseY = yPos;
 }
 
-void processInput(GLFWwindow* window) { // Function to process input
+void processInput(GLFWwindow* window) {
 
 	int x = 0;
 	int y = 0;
@@ -96,19 +96,16 @@ void processInput(GLFWwindow* window) { // Function to process input
 		glfwSetWindowTitle(window, "You Cannot See This Text");
 	}
 	else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Wireframe - (side (it is in 3d), draw as lines)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glfwSetWindowTitle(window, "Wireframe");
-		//std::cout << "M\n";
 	}
 	else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 		glfwGetWindowPos(window, &x, &y);
 		glfwSetWindowPos(window, 0, y - 1);
-		//std::cout << "M\n";
 	}
 	else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
 		glfwGetWindowPos(window, &x, &y);
 		glfwSetWindowPos(window, 0, y + 1);
-		//std::cout << "M\n";
 	}
 	else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_RELEASE) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -121,33 +118,31 @@ GLFWwindow* Renderer::init() {
 
 	stbi_set_flip_vertically_on_load(true);
 
-	glfwInit(); // Initialize glfw
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // GL V3.3 - if the user does not have the proper OpenGL version, GLFW won't even run
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // Core profile set
-	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // For Mac
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 
-	GLFWwindow* window = glfwCreateWindow(800, 800, "Last Time", NULL, NULL); // Creates a pointer to a 
-	//window called 'window' with a width of 800 & a height of 600 called "Last Time"
-	if (window == NULL) { // If the window pointer was never set (no window created)
+	GLFWwindow* window = glfwCreateWindow(800, 800, "Last Time", NULL, NULL); 
+	if (window == NULL) { 
 		std::cout << "ERROR: GLFW window creation failed\n";
-		glfwTerminate(); // Stops glfw
+		glfwTerminate(); 
 		return NULL;
 	}
-	glfwMakeContextCurrent(window); // Sets the current context (where our code will run) to the window
+	glfwMakeContextCurrent(window); 
 
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) { // We give GLAD function to load address of OpenGL function pointers - GLFW does this with glfwGetProcAddress
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) { 
 		std::cout << "ERROR: Failed to initialize GLAD\n";
 		return NULL;
 	}
 
-	glViewport(0, 0, 800, 800); // Creates a viewport (place to do the graphics in) at (0, 0) with width 800 and height 600
+	glViewport(0, 0, 800, 800); 
 
-	void framebuffer_size_callback(GLFWwindow * window, int width, int height); // Declares a function to resize viewport every time window size is changed
+	void framebuffer_size_callback(GLFWwindow * window, int width, int height);
 
 
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); // Calls our function every time the window size changes - passes in reference to that block of code (function) for the glfw function to call
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	glfwSetScrollCallback(window, scroll_callback);
 
@@ -246,189 +241,36 @@ int Renderer::render(GLFWwindow* window, std::vector<Object> objects)
 		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
 		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
 	}; */
-	unsigned int indicies[] = {
-		0, 0, 0
-	};
-	glm::vec3 cubePositions[] = {
-		glm::vec3( 1.1f,  0.8f, -1.0f),
-		glm::vec3(-1.0f,  1.3f, -1.5f),
-		glm::vec3(-2.4f, -2.1f, -3.6f),
-		glm::vec3(-2.1f,  2.7f, -3.3f),
-		glm::vec3( 3.2f, -1.4f, -4.5f),
-		glm::vec3( 2.1f, -4.1f, -5.9f),
-		glm::vec3(-2.5f,  2.4f, -6.0f),
-		glm::vec3( 5.6f, -3.5f, -8.9f),
-		glm::vec3(-2.7f,  1.2f, -10.2f),
-		glm::vec3( 4.6f, -3.6f, -10.9f)
-	};
-
-
-	//float texCoords[] = { // (s, t, r) axes = (x, y, z) axes - usually only (s, t) axes
-	//	0.0f, 0.0f, // Lower-left corner
-	//	1.0f, 0.0f, // Lower-right corner
-	//	0.5f, 1.0f  // Top-center corner
-	//};
+		
 
 
 
-	// What if coords outside range?
+	//unsigned int VBO;
+	//glGenBuffers(1, &VBO);
 
-	// GL_REPEAT - repeats texture - DEFAULT
-	// GL_MIRRORED_REPEAT - same as GL_REPEAT but mirrored each repeat
-	// GL_CLAMP_TO_EDGE - further coords become whatever the nearest edge is - stretched edge pattern
-	// GL_CLAMP_TO_BORDER - User specified border color everything is set to
-	// Change these with glTexParameteri(target, option/axis, mode)
-	// ex: glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // sets a 2d texture's wrapping on the s (x) axis to 'clamp to edge'
-	// Check Khronos documentation for all versions
-
-	// FILTERING
-	// GL_NEAREST - aka nearest-neighbor/point filtering - pixelated
-	// GL_LINEAR - aka bilinear filtering - 2000's video game style (blurred)
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // Sets filtering to nearest-neighbor FOR MINIFYING THE IMAGE
-
-	//                                                                                                            __________________________________
-	// MIPMAPS                                                                                                   |                      |           |
-	// If we have faraway textures, we don't need them to have the same resolution as the near ones              |                      |   |\ /|   |
-	// We can have a series of textures in which each one is twice as small (1/4 the area ) of the last          |      |\      /|      |   | V |   |
-	// It would be annoying to do this manually                                                                  |      | \    / |      |           |
-	// We can do glGenerateMipmaps() to do this for us                                                           |      |  \  /  |      |-----------'
-	//                                                                                                           |      |   \/   |      |  M  |
-	//                                                                                                           |                      |_____|
-	//                                                                                                           |                      |__|   
-	//                                                                                                           |______________________|-'
-
-	// We can filter in between mipmaps via: glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-
-	// LOADING TEXTURES
-
-	// To load textures, we will use stb_image.h - This allows us to use many formats and so we don't have to code an image loader
-
-
-	
-
-	/*
-	glGenTextures(1, &texture2);
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, texture2);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	data = stbi_load("Untitled.jpg", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else {
-		std::cout << "Failed to load texture" << std::endl;
-	}
-
-	stbi_image_free(data);
-	*/
-	unsigned int EBO;
-	glGenBuffers(1, &EBO);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); // Bind EBO
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW); // Set buffer data - ONLY INDEX DATA
-
-
-	// Now, we need to create a vertex buffer object (VBO)
-	// Stores all vertex data in an array - makes it so we can send it to the GPU (shaders) all at once - faster
-	// Not a "real object" - an OpenGL object - a buffer or array
-
-
-	unsigned int VBO; // VBO ID
-	glGenBuffers(1, &VBO); // Generates the OpenGL object as a buffer
-
-	// Generating VAO
-
-	unsigned int VAO;
-	glGenVertexArrays(1, &VAO); // Generate Buffer
-	glBindVertexArray(VAO); // Binds VAO to current context
+	//unsigned int VAO;
+	//glGenVertexArrays(1, &VAO);
+	//glBindVertexArray(VAO);
 
 
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Binds VBO to current context - we can bind multiple buffers as long as they are of a separate type
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); // Copies vertex data into the buffer's memory
-	// GL_STREAM_DRAW - Data set once and only used once
-	// GL_STATIC_DRAW - Data set once used many times
-	// GL_DYNAMIC_DRAW - Data changed a lot and used many times
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-
-	// SHADER
-
-	Shader shader("vertex.glsl", "fragment.glsl");
-
-
-
-
-
-
-	// LINKING VERTEX ATTRIBUTES
-
-	// We can format our VBO however we want - means more flexibility, but we also need to tell OpenGL how we formatted it
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	//Parameter 1: Specifies which attribute we are configuring - in our vertex shader, we said: layout (location = 0), specifying that 0 is the location attribute
-	//Parameter 2: Specifies size of attribute - 3 values
-	//Parameter 3: Type of data
-	//Parameter 4: Says if we want to normalize these values (such as an integer representing color values), but our coordinates are already normalized
-	//Parameter 5: Stride - space between each vertex attribute - length of a vertex - ours is 3 floats
-	//Parameter 6: Of type void* - offset of where data begins in buffer
-
-	// When calling glVertexAttribPointer, it depends on which buffer is bound to GL_ARRAY_BUFFER (you can only have one of each type)
-
 	glEnableVertexAttribArray(0);
 
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-
 	glEnableVertexAttribArray(1);
 
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))); // Textures
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
-	// We have to do ALL of this (bindBuffer, bufferData, vertexAttribPointer, enableVertexAttribArray, useProgram, draw stuf)
-	// EACH time we want to draw ONE object (and call vertexAttribPointer for each attribute)
-
-	// Easier solution? - YES - store these state configurations
-
-
-	// VERTEX ARRAY OBJECT (VAO)
-	// Can be bound like a vertex buffer object
-	// Any subsequent vertex attrib calls will be stored in the VAO
-	// You only need to configure vertex attrib pointers once
-	// Whenever we want to draw the current object, we just bind the corresponding VAO
-	// Stores:
-	// - Calls to glEnable/Disable VertexAttribArray
-	// - Vertex attrib configurations via glVertexAttribPointer
-	// - VBOs associated w/ vertex atribs by calls to glVertexAttribPointer
-
-
-
-	/*
-	ELEMENT BUFFER OBJECT (EBO)
-
-	- We want to draw a rectangle - two triangles
-	- W/out an EBO, we define two separate triangles - this means we re-define TWO vertices - 50% overhead
-	- VBO stores ONLY UNIQUE vertices - EBO stores ONLY the ORDER IN WHICH WE WOULD LIKE TO DRAW THEM
-
-	*/
-
-
-
-	/*float timeValue;
-	float redValue;
-	float greenValue;
-	float blueValue;
-	int vertexColorLocation;*/
 
 	float count = 0;
 
+	Shader shader("vertex.glsl", "fragment.glsl");
+
 	shader.use();
-	glUniform1i(glGetUniformLocation(shader.ID, "texture1"), 0); // manually
-	//shader.setInt("texture2", 1); // or with shader class
-	//shader.setFloat("mix", 0.5);
+	glUniform1i(glGetUniformLocation(shader.ID, "texture1"), 0);
 
 	glm::mat4 ID = glm::mat4(1.0f);
 
@@ -438,7 +280,6 @@ int Renderer::render(GLFWwindow* window, std::vector<Object> objects)
 
 	glm::mat4 view = glm::mat4(1.0f);
 	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -2.0f));
-	//view = ID;
 
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 10000.0f);
@@ -479,9 +320,6 @@ int Renderer::render(GLFWwindow* window, std::vector<Object> objects)
 	bool cursorLock = true;
 	bool esc = false;
 
-	//int rainbowEnd = sizeof(vertices) / sizeof(float);
-
-
 
 	yScroll = 0.0f;
 
@@ -495,7 +333,7 @@ int Renderer::render(GLFWwindow* window, std::vector<Object> objects)
 
 	glEnable(GL_DEPTH_TEST);
 
-	while (!glfwWindowShouldClose(window)) // Keeps window open until glfw says it should close
+	while (!glfwWindowShouldClose(window))
 	{
 
 
@@ -514,14 +352,6 @@ int Renderer::render(GLFWwindow* window, std::vector<Object> objects)
 		}
 
 
-		/*
-		for (int i = 0; i < sizeof(vertices) / sizeof(float); i++) {
-			std::cout << vertices[i] << ", ";
-			if ((i + 1) % 8 == 0) {
-				std::cout << "\n";
-			}
-		}
-		*/
 
 		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 			angVel += angAccel * tDiff;
@@ -544,12 +374,6 @@ int Renderer::render(GLFWwindow* window, std::vector<Object> objects)
 		else if (angVel < -13) {
 			angVel = -13;
 		}
-		//angle += angVel;
-		//std::cout << angVel << "\n";
-
-
-		//count += angVel * 0.1f;
-		//transform = glm::rotate(transform, 0.001f * angVel, glm::vec3(0.0f, 0.0f, 1.0f));
 
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 			cameraZ += cameraSpeed * cos(cameraThetaY) * tDiff * cos(cameraThetaX);
@@ -578,11 +402,15 @@ int Renderer::render(GLFWwindow* window, std::vector<Object> objects)
 			esc = true;
 		}
 
-		/*if (glfwGetKey(window, GLFW_MOUSE_) == GLFW_PRESS) {
-			FOV += 3.0 * tDiff;
-		} else if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
-			FOV -= 3.0 * tDiff;
-		}*/
+
+		if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glDisable(GL_CULL_FACE);
+		} else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_RELEASE) {
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			glEnable(GL_CULL_FACE);
+		}
+
 
 		cameraSpeed += 1 * yScroll;
 
@@ -596,33 +424,14 @@ int Renderer::render(GLFWwindow* window, std::vector<Object> objects)
 		}
 
 
-		/*
-		if (FOV > 160) {
-			FOVDir = -1;
-		}
-		else if (FOV < 8) {
-			FOVDir = 1;
-		}
-		*/
-
-		//FOV += FOVDir * 30 * tDiff;
-
-		//std::cout << FOV << "\n";
-
 		if (yScroll != 0) {
 			yScroll = 0.0f;
 		}
-		/*
-		d = -w / (tan(glm::radians(FOV / 2)));
 
-		if (d > -0.78f) {
-			d = -0.78f;
-		}
-		*/
 		angVel = 0.5f;
 
 
-		if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
+		/*if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
 			cameraThetaX += glm::radians(20.0f) * tDiff;
 		}
 		else if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
@@ -633,46 +442,19 @@ int Renderer::render(GLFWwindow* window, std::vector<Object> objects)
 		}
 		else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
 			cameraThetaY += glm::radians(20.0f) * tDiff;
-		}
+		}*/
 
-		//  // 
 
 		projection = glm::perspective(glm::radians(45.0f), ((float)windowWidth) / windowHeight, 0.01f, 500.0f);
 
 
 		glUniformMatrix4fv(glGetUniformLocation(shader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-		
-		//vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor"); // Querys location of our uniform (in memory)
 
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); // Bind EBO
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW); // Set buffer data - ONLY INDEX DATA
-
-		glBindBuffer(GL_ARRAY_BUFFER, VBO); // Binds VBO to current context - we can bind multiple buffers as long as they are of a separate type
-		//glBufferData(GL_ARRAY_BUFFER, objects.at(0).getNumVertices() * sizeof(float), vertices, GL_STATIC_DRAW); // Copies vertex data into the buffer's memory
-
-
-		//processInput(window); // Calls our process input loop
-
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // Sets the color we will clear to - classis OpenGL color EVERY TUTORIAL USES FOR SOME REASON - state-setting function
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clears the color and sets it to out prevoiusly specified color - state-using function - uses current state to retrieve color
-
+		//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); 
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shader.use();
-		//glUniform4f(vertexColorLocation, redValue, greenValue, blueValue, 1.0f); // Set uniform value
-		// glUniform has prefixes for each type of value
-		// f  - float
-		// i  - int
-		// ui - unsigned int
-		// 3f - 3 floats
-		// 4f - 4 floats
-		// fv - float vector/array
-		//glActiveTexture(GL_TEXTURE1);
-		//glBindTexture(GL_TEXTURE_2D, texture2);
-
-
-		//glBindVertexArray(VAO);
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		
 
@@ -683,30 +465,18 @@ int Renderer::render(GLFWwindow* window, std::vector<Object> objects)
 
 		for (int i = 0; i < objects.size(); i++) {
 
-			//std::cout << "0: " << objects.at(i).getVertices()[1] << "\n";
+			//glBufferData(GL_ARRAY_BUFFER, objects.at(i).getVertices().size() * sizeof(float), &objects.at(i).getVertices()[0], GL_STATIC_DRAW);
+			//glBindVertexArray(VAO);
 
-			//float* test = &objects.at(i).getVertices()[0];
-
-			
-			//glGenBuffers(1, &VBO); // Generates the OpenGL object as a buffer
-
-			//glBindBuffer(GL_ARRAY_BUFFER, objects.at(i).getVBO()); // Binds VBO to current context - we can bind multiple buffers as long as they are of a separate type
-			glBufferData(GL_ARRAY_BUFFER, objects.at(i).getVertices().size() * sizeof(float), &objects.at(i).getVertices()[0], GL_STATIC_DRAW); // Copies vertex data into the buffer's memory
-
-			glBindVertexArray(VAO); // Binds VAO
-			// Render stuf ici
-
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-
-			//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-			//glBufferData(GL_ARRAY_BUFFER, objects.at(i).getNumVertices() * sizeof(float), objects.at(i).getVertices(), GL_STATIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, objects.at(i).getVBO());
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, objects.at(i).getEBO());
+			glBindVertexArray(objects.at(i).getVAO());
+			glBufferData(GL_ARRAY_BUFFER, objects.at(i).getVertices().size() * sizeof(float), &objects.at(i).getVertices()[0], GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, objects.at(i).getIndices().size() * sizeof(unsigned int), &objects.at(i).getIndices()[0], GL_STATIC_DRAW);
 
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, objects.at(i).getTexture());
 
-			
-
-			//std::cout << "(" << cameraX << ", " << cameraY << ", " << cameraZ << ")\n";
 
 			model = objects.at(i).updateModel(glm::vec3(cameraX, cameraY, cameraZ));
 
@@ -720,11 +490,11 @@ int Renderer::render(GLFWwindow* window, std::vector<Object> objects)
 
 
 
-			glDrawArrays(GL_TRIANGLES, 0, objects.at(i).getNumVertices());
+			glDrawElements(GL_TRIANGLES, objects.at(i).getIndices().size(), GL_UNSIGNED_INT, 0);
 		}
 
-		glfwSwapBuffers(window); // Swaps buffers (double buffer)
-		glfwPollEvents(); // Checks if anything is happening
+		glfwSwapBuffers(window);
+		glfwPollEvents();
 
 	}
 
