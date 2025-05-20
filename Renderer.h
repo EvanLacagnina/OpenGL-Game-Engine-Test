@@ -9,5 +9,5 @@ public:
 	static glm::mat4 ID;
 
 	static GLFWwindow* init();
-	static int render(GLFWwindow* window, std::vector<Object> objects);
+	static int render(GLFWwindow* window);
 };

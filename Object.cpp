@@ -1,6 +1,8 @@
 #include "Object.h"
 #include "Renderer.h"
 
+std::vector<Object> Object::objects, Object::lights;
+
 Object::Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices) {
 	Object::vertices = vertices;
 	Object::indices = indices;
@@ -28,6 +30,8 @@ Object::Object(std::vector<float> vertices, std::vector<unsigned int> indices, g
 	glEnableVertexAttribArray(2);
 
 	glBufferData(GL_ARRAY_BUFFER, Object::vertices.size() * sizeof(float), &Object::vertices[0], GL_STATIC_DRAW);
+	
+	index = objects.size();
 }
 
 unsigned int Object::getTexture() {
@@ -62,6 +66,10 @@ void Object::setScale(glm::vec3 scale) {
 	Object::scale = scale;
 }
 
+void Object::addObject(Object obj) {
+	objects.push_back(obj);
+}
+
 glm::vec3 Object::getPos() {
 	return Object::pos;
 }
@@ -70,6 +78,14 @@ glm::vec3 Object::getRot() {
 }
 glm::vec3 Object::getScale() {
 	return Object::scale;
+}
+
+std::vector<Object> Object::getObjects() {
+	return objects;
+}
+
+Object Object::getObjects(int i) {
+	return objects.at(i);
 }
 
 int Object::getNumVertices() {

@@ -154,7 +154,7 @@ GLFWwindow* Renderer::init() {
 	return window;
 }
 
-int Renderer::render(GLFWwindow* window, std::vector<Object> objects)
+int Renderer::render(GLFWwindow* window)
 {
 	
 
@@ -463,22 +463,24 @@ int Renderer::render(GLFWwindow* window, std::vector<Object> objects)
 			glfwSetCursorPos(window, windowWidth / 2, windowHeight / 2);
 		}
 
-		for (int i = 0; i < objects.size(); i++) {
+		for (int i = 0; i < Object::getObjects().size(); i++) {
 
 			//glBufferData(GL_ARRAY_BUFFER, objects.at(i).getVertices().size() * sizeof(float), &objects.at(i).getVertices()[0], GL_STATIC_DRAW);
 			//glBindVertexArray(VAO);
 
-			glBindBuffer(GL_ARRAY_BUFFER, objects.at(i).getVBO());
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, objects.at(i).getEBO());
-			glBindVertexArray(objects.at(i).getVAO());
-			glBufferData(GL_ARRAY_BUFFER, objects.at(i).getVertices().size() * sizeof(float), &objects.at(i).getVertices()[0], GL_STATIC_DRAW);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, objects.at(i).getIndices().size() * sizeof(unsigned int), &objects.at(i).getIndices()[0], GL_STATIC_DRAW);
+			//std::cout << "Vertices: " << Object::getObjects(i).getVertices().size() << "\n";
+
+			glBindBuffer(GL_ARRAY_BUFFER, Object::getObjects(i).getVBO());
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Object::getObjects(i).getEBO());
+			glBindVertexArray(Object::getObjects(i).getVAO());
+			glBufferData(GL_ARRAY_BUFFER, Object::getObjects(i).getVertices().size() * sizeof(float), &Object::getObjects(i).getVertices()[0], GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, Object::getObjects(i).getIndices().size() * sizeof(unsigned int), &Object::getObjects(i).getIndices()[0], GL_STATIC_DRAW);
 
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, objects.at(i).getTexture());
+			glBindTexture(GL_TEXTURE_2D, Object::getObjects(i).getTexture());
 
 
-			model = objects.at(i).updateModel(glm::vec3(cameraX, cameraY, cameraZ));
+			model = Object::getObjects(i).updateModel(glm::vec3(cameraX, cameraY, cameraZ));
 
 			
 
@@ -490,7 +492,7 @@ int Renderer::render(GLFWwindow* window, std::vector<Object> objects)
 
 
 
-			glDrawElements(GL_TRIANGLES, objects.at(i).getIndices().size(), GL_UNSIGNED_INT, 0);
+			glDrawElements(GL_TRIANGLES, Object::getObjects(i).getIndices().size(), GL_UNSIGNED_INT, 0);
 		}
 
 		glfwSwapBuffers(window);

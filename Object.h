@@ -29,6 +29,10 @@ protected:
 	unsigned int VAO;
 	unsigned int EBO;
 
+	static std::vector<Object> objects, lights;
+
+	int index;
+
 public:
 	Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices);
 
@@ -40,9 +44,14 @@ public:
 	void setRot(glm::vec3 rot);
 	void setScale(glm::vec3 scale);
 
+	static void addObject(Object obj);
+
 	glm::vec3 getPos();
 	glm::vec3 getRot();
 	glm::vec3 getScale();
+
+	static std::vector<Object> getObjects();
+	static Object getObjects(int i);
 
 	int getNumVertices();
 	std::vector<float> getVertices();
