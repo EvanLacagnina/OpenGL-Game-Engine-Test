@@ -7,6 +7,7 @@
 #include "shader.h"
 #include "stb_image.h"
 #include "Renderer.h"
+#include "Light.h"
 
 #include <glm/glm/glm.hpp>
 #include <glm/glm/gtc/matrix_transform.hpp>
@@ -267,10 +268,13 @@ int Renderer::render(GLFWwindow* window)
 
 	float count = 0;
 
-	Shader shader("vertex.glsl", "fragment.glsl");
+	Shader objectShader("vertex.glsl", "objectFragment.glsl");
+	Shader lightShader("vertex.glsl", "lightFragment.glsl");
 
-	shader.use();
-	glUniform1i(glGetUniformLocation(shader.ID, "texture1"), 0);
+	objectShader.use();
+	glUniform1i(glGetUniformLocation(objectShader.ID, "texture1"), 0);
+	lightShader.use();
+	glUniform1i(glGetUniformLocation(lightShader.ID, "texture1"), 0);
 
 	glm::mat4 ID = glm::mat4(1.0f);
 
@@ -332,6 +336,7 @@ int Renderer::render(GLFWwindow* window)
 	float theta = 0.0f;
 
 	glEnable(GL_DEPTH_TEST);
+
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -445,16 +450,18 @@ int Renderer::render(GLFWwindow* window)
 		}*/
 
 
+
 		projection = glm::perspective(glm::radians(45.0f), ((float)windowWidth) / windowHeight, 0.01f, 500.0f);
 
-
-		glUniformMatrix4fv(glGetUniformLocation(shader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
+		objectShader.use();
+		glUniformMatrix4fv(glGetUniformLocation(objectShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+		lightShader.use();
+		glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
 		//glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shader.use();
+		
 
 		
 
@@ -487,8 +494,20 @@ int Renderer::render(GLFWwindow* window)
 			view = glm::rotate(ID, -cameraThetaX, glm::vec3(0.0f, 1.0f, 0.0f));
 			view = glm::rotate(view, cameraThetaY, glm::vec3(cos(-cameraThetaX), 0.0f, sin(-cameraThetaX)));
 
-			shader.setMat4("model", model);
-			shader.setMat4("view", view);
+			if (!Object::getObjects(i).getIsLight()) {
+				objectShader.use();
+				objectShader.setMat4("model", model);
+				objectShader.setMat4("view", view);
+				objectShader.setVec3("lightColor", Light::getLights(0).getColor());
+				//std::cout << "p\n";
+			}
+			else {
+				lightShader.use();
+				lightShader.setMat4("model", model);
+				lightShader.setMat4("view", view);
+				lightShader.setVec3("lightColor", Light::getLights(0).getColor()); // 
+				//std::cout << "p\n";
+			}
 
 
 

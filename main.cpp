@@ -3,14 +3,49 @@
 #include "Cube.h"
 #include "Texture.h"
 #include "Plane.h"
+#include "Light.h"
 
 
 int main() {
 
+	std::vector<float> cubeVertices = {
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 2.0f,  1.0f, // 00
+		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 3.0f, 1.0f, // 01
+		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 2.0f,  2.0f,  // 02
+		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 3.0f, 2.0f,  // 03
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // 04
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 2.0f,  0.0f,  // 05
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 2.0f,  4.0f,  // 06
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 3.0f, 0.0f,  // 07
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 4.0f,  1.0f, // 08
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 3.0f, 4.0f,  // 09
+		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 2.0f,  3.0f, // 10
+		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f,  // 11
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 4.0f,  2.0f,  // 12
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 3.0f, 3.0f, // 13
+	};
+
+	std::vector<unsigned int> indices = {
+		2, 0, 1,
+		2, 1, 3,
+
+		4, 0, 11,
+		11, 0, 2,
+
+		0, 5, 7,
+		0, 7, 1,
+
+		3, 1, 8,
+		3, 8, 12,
+
+		10, 2, 3,
+		10, 3, 13,
+
+		6, 10, 13,
+		6, 13, 9
+	};
 
 	//Object cube = Object(cubevertices, 0, 0, 0, 0, 0, 0, "Untitled.jpg");
-
-	std::vector<Object> objs;
 
 	GLFWwindow* window = Renderer::init();
 
@@ -60,7 +95,9 @@ int main() {
 	Cube(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 2.0f, 0.1f), greenTexture);
 	Cube(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 2.0f), blueTexture);
 
-	Cube(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture);
+	//Cube(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture);
+
+	Light(cubeVertices, indices, glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture, 8, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	if(window != NULL){
 		Renderer::render(window);

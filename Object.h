@@ -6,6 +6,7 @@
 #include "stb_image.h"
 #include <glad/glad.h>
 #include <vector>
+//#include "Object.h"
 //#include <GLFW/glfw3.h>
 
 class Object 
@@ -33,6 +34,8 @@ protected:
 
 	int index;
 
+	bool isLight;
+
 public:
 	Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices);
 
@@ -49,6 +52,8 @@ public:
 	glm::vec3 getPos();
 	glm::vec3 getRot();
 	glm::vec3 getScale();
+
+	bool getIsLight();
 
 	static std::vector<Object> getObjects();
 	static Object getObjects(int i);

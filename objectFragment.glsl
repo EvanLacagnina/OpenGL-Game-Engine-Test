@@ -13,7 +13,7 @@ void main() //
 {
 	// FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 1.0) * vec4(ourColor, 0.0); // round(TexCoord * 50) / 50)
 
-	vec4 ambientColor = vec4(0.2);
-	FragColor = texture(texture1, TexCoord) * ambientColor; //* vec4(ourColor, 0.0);
+	vec4 ambientStrength = vec4(0.2);
+	FragColor = texture(texture1, TexCoord) * ambientStrength * vec4(lightColor, 1.0); //* vec4(ourColor, 0.0);
 	//FragColor = vec4(1.0f);
 }

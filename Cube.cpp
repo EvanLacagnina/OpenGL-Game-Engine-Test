@@ -43,5 +43,6 @@ Cube::Cube(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex) : Ob
 	Object::indices = indices;
 
 	//Object::objects
-	Object::addObject(*this);;
+	Object::addObject(*this);
+
 }

@@ -42,6 +42,9 @@
     <ClCompile Include="Plane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -68,12 +71,21 @@
     <ClInclude Include="Plane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vertex.glsl">
       <Filter>Source Files</Filter>
     </None>
     <None Include="fragment.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="lightFragment.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="objectFragment.glsl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

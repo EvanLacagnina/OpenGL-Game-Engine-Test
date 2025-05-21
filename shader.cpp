@@ -105,3 +105,6 @@ void Shader::setFloat(const std::string& name, float value) const { // We can in
 void Shader::setMat4(const std::string& name, glm::mat4 value) const { // We can input uniforms into our shader
 	glUniformMatrix4fv(glGetUniformLocation(this->ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }
+void Shader::setVec3(const std::string& name, glm::vec3 value) const { // We can input uniforms into our shader
+	glUniform3fv(glGetUniformLocation(this->ID, name.c_str()), 1, glm::value_ptr(value));
+}
