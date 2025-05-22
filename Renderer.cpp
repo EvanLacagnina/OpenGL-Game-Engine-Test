@@ -337,10 +337,18 @@ int Renderer::render(GLFWwindow* window)
 
 	glEnable(GL_DEPTH_TEST);
 
+	glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f);
 
+	//(*Light::getLights(0)).setColor(glm::vec3(1.0f, 1.0f, 1.0f));
+	//(*Light::getLights(0)).setPos(glm::vec3(cos(lastTime * 10), 3.0f, sin(lastTime * 10)));
+	//std::cout << "before setPos\n";
+	//std::cout << "after setPos\n";
+
+	
 	while (!glfwWindowShouldClose(window))
 	{
 
+		//std::cout << (*Light::getLights(0)).getColor().z << "\n";
 
 		glfwGetWindowSize(window, &windowWidth, &windowHeight);
 
@@ -470,6 +478,14 @@ int Renderer::render(GLFWwindow* window)
 			glfwSetCursorPos(window, windowWidth / 2, windowHeight / 2);
 		}
 
+		
+
+		(*Light::getLights(0)).setPos(glm::vec3(9 * cos(lastTime * 2) + 5, 3 * sin(lastTime * 4) + 4, 9 * sin(lastTime * 2) + 5)); // Change light position
+		
+		//color = glm::vec3(fmin(abs((fmod(lastTime, 6)) - 3) - 1, 1.0f), fmin(-abs(fmod(lastTime, 6) - 2) + 2, 1.0f), fmin(abs(fmod(lastTime, 6) - 4) - 1, 1.0f));
+		//(*Light::getLights(0)).setColor(color); // Change light color
+
+		
 		for (int i = 0; i < Object::getObjects().size(); i++) {
 
 			//glBufferData(GL_ARRAY_BUFFER, objects.at(i).getVertices().size() * sizeof(float), &objects.at(i).getVertices()[0], GL_STATIC_DRAW);
@@ -477,41 +493,42 @@ int Renderer::render(GLFWwindow* window)
 
 			//std::cout << "Vertices: " << Object::getObjects(i).getVertices().size() << "\n";
 
-			glBindBuffer(GL_ARRAY_BUFFER, Object::getObjects(i).getVBO());
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Object::getObjects(i).getEBO());
-			glBindVertexArray(Object::getObjects(i).getVAO());
-			glBufferData(GL_ARRAY_BUFFER, Object::getObjects(i).getVertices().size() * sizeof(float), &Object::getObjects(i).getVertices()[0], GL_STATIC_DRAW);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, Object::getObjects(i).getIndices().size() * sizeof(unsigned int), &Object::getObjects(i).getIndices()[0], GL_STATIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, (*Object::getObjects(i)).getVBO());
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*Object::getObjects(i)).getEBO());
+			glBindVertexArray((*Object::getObjects(i)).getVAO());
+			glBufferData(GL_ARRAY_BUFFER, (*Object::getObjects(i)).getVertices().size() * sizeof(float), &Object::getObjects().at(i).getVertices()[0], GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (*Object::getObjects(i)).getIndices().size() * sizeof(unsigned int), &Object::getObjects().at(i).getIndices()[0], GL_STATIC_DRAW);
 
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, Object::getObjects(i).getTexture());
+			glBindTexture(GL_TEXTURE_2D, (*Object::getObjects(i)).getTexture());
 
 
-			model = Object::getObjects(i).updateModel(glm::vec3(cameraX, cameraY, cameraZ));
+			model = (*Object::getObjects(i)).updateModel();
 
 			
-
 			view = glm::rotate(ID, -cameraThetaX, glm::vec3(0.0f, 1.0f, 0.0f));
 			view = glm::rotate(view, cameraThetaY, glm::vec3(cos(-cameraThetaX), 0.0f, sin(-cameraThetaX)));
-
-			if (!Object::getObjects(i).getIsLight()) {
+			view = glm::translate(view, glm::vec3(cameraX, cameraY, cameraZ));
+			
+			if (!(*Object::getObjects(i)).getIsLight()) {
 				objectShader.use();
 				objectShader.setMat4("model", model);
 				objectShader.setMat4("view", view);
-				objectShader.setVec3("lightColor", Light::getLights(0).getColor());
+				objectShader.setVec3("lightColor", (*Light::getLights(0)).getColor());
 				//std::cout << "p\n";
 			}
 			else {
 				lightShader.use();
 				lightShader.setMat4("model", model);
 				lightShader.setMat4("view", view);
-				lightShader.setVec3("lightColor", Light::getLights(0).getColor()); // 
+				lightShader.setVec3("lightColor", (*Light::getLights(0)).getColor()); // 
 				//std::cout << "p\n";
 			}
+			objectShader.setVec3("lightPos", (*Light::getLights(0)).getPos());
 
 
 
-			glDrawElements(GL_TRIANGLES, Object::getObjects(i).getIndices().size(), GL_UNSIGNED_INT, 0);
+			glDrawElements(GL_TRIANGLES, (*Object::getObjects(i)).getIndices().size(), GL_UNSIGNED_INT, 0);
 		}
 
 		glfwSwapBuffers(window);

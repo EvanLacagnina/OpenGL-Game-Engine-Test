@@ -11,8 +11,13 @@ public:
 	Light(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices, glm::vec3 color);
 
 	glm::vec3 getColor();
+	glm::vec3 getPos();
 
-	static Light getLights(int i);
+	static Light* getLights(int i);
 
 	static void addLight(Light light);
+
+	void setPos(glm::vec3 pos);
+
+	void setColor(glm::vec3 color);
 };

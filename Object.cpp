@@ -21,14 +21,17 @@ Object::Object(std::vector<float> vertices, std::vector<unsigned int> indices, g
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
+
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(8 * sizeof(float)));
+	glEnableVertexAttribArray(3);
 
 	glBufferData(GL_ARRAY_BUFFER, Object::vertices.size() * sizeof(float), &Object::vertices[0], GL_STATIC_DRAW);
 	
@@ -41,16 +44,19 @@ unsigned int Object::getTexture() {
 	return Object::texture;
 }
 
-glm::mat4 Object::updateModel(glm::vec3 cameraPos) {
-	
-	Object::model = glm::translate(Renderer::ID, -Object::pos + cameraPos);
-	//std::cout << "(" << Object::pos[0] << ", " << Object::pos[1] << ", " << Object::pos[2] << ")\n";
+glm::mat4 Object::updateModel() {
 
+	Object::model = glm::translate(Renderer::ID, -this->pos);
+	if(index == 26){
+		std::cout << "(" << Object::pos[0] << ", " << Object::pos[1] << ", " << Object::pos[2] << ")\n";
+		std::cout << "(" << Object::getPos()[0] << ", " << Object::getPos()[1] << ", " << Object::getPos()[2] << ")\n";
+	}
 	//Object::rot %= glm::vec3(6.283185307179586476925286766559, 6.283185307179586476925286766559, 6.283185307179586476925286766559);
 	Object::model = glm::rotate(Object::model, glm::radians(Object::rot[0]), glm::vec3(1.0f, 0.0f, 0.0f));
 	Object::model = glm::rotate(Object::model, glm::radians(Object::rot[1]), glm::vec3(0.0f, cos(glm::radians(Object::rot[0])), sin(glm::radians(Object::rot[0]))));
 	Object::model = glm::rotate(Object::model, glm::radians(Object::rot[2]), glm::vec3(cos(glm::radians(Object::rot[0])) * sin(glm::radians(Object::rot[1])), sin(glm::radians(Object::rot[0])), cos(glm::radians(Object::rot[0])) * cos(glm::radians(Object::rot[1]))));
 	//std::cout << "(" << 
+
 
 	Object::model = glm::scale(Object::model, Object::scale);
 
@@ -58,7 +64,7 @@ glm::mat4 Object::updateModel(glm::vec3 cameraPos) {
 }
 
 void Object::setPos(glm::vec3 pos) {
-	Object::pos = pos;
+	this->pos = pos;
 }
 
 void Object::setRot(glm::vec3 rot) {
@@ -67,6 +73,10 @@ void Object::setRot(glm::vec3 rot) {
 
 void Object::setScale(glm::vec3 scale) {
 	Object::scale = scale;
+}
+
+void Object::setColor(glm::vec3 color) {
+	
 }
 
 void Object::addObject(Object obj) {
@@ -91,8 +101,8 @@ std::vector<Object> Object::getObjects() {
 	return objects;
 }
 
-Object Object::getObjects(int i) {
-	return objects.at(i);
+Object* Object::getObjects(int i) {
+	return &objects.at(i);
 }
 
 int Object::getNumVertices() {

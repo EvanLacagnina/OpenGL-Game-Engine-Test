@@ -13,17 +13,19 @@ class Object
 {
 private:
 	
-	glm::vec3 pos;
-	glm::vec3 rot;
-	glm::vec3 scale;
-
-	glm::mat4 model;
+	
 
 	unsigned int texture;
 
 	int numVertices;
 
 protected:
+	glm::vec3 pos;
+	glm::vec3 rot;
+	glm::vec3 scale;
+
+	glm::mat4 model;
+
 	std::vector<float> vertices;
 	std::vector<unsigned int> indices;
 	unsigned int VBO;
@@ -41,11 +43,12 @@ public:
 
 	unsigned int getTexture();
 
-	glm::mat4 updateModel(glm::vec3 cameraPos);
+	glm::mat4 updateModel();
 
 	void setPos(glm::vec3 pos);
 	void setRot(glm::vec3 rot);
 	void setScale(glm::vec3 scale);
+	void setColor(glm::vec3 color);
 
 	static void addObject(Object obj);
 
@@ -56,7 +59,7 @@ public:
 	bool getIsLight();
 
 	static std::vector<Object> getObjects();
-	static Object getObjects(int i);
+	static Object* getObjects(int i);
 
 	int getNumVertices();
 	std::vector<float> getVertices();

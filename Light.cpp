@@ -15,10 +15,25 @@ glm::vec3 Light::getColor() {
 	return Light::color;
 }
 
-Light Light::getLights(int i) {
-	return Light::lights.at(i);
+glm::vec3 Light::getPos() {
+	//std::cout << "Light getPos: " << Object::getPos().x << "\n";
+	return Object::getPos();
+}
+
+Light* Light::getLights(int i) {
+	return &Light::lights.at(i);
 }
 
 void Light::addLight(Light light) {
 	Light::lights.push_back(light);
+}
+
+void Light::setPos (glm::vec3 pos) {
+	Object::setPos(pos);
+	(*Object::getObjects(index)).setPos(pos);
+}
+
+void Light::setColor(glm::vec3 color) {
+	this->color = color;
+	(*Object::getObjects(index)).setColor(color);
 }
