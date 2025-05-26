@@ -3,16 +3,16 @@
 Plane::Plane(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex) : Object({0.0f}, { 0 }, pos, rot, scale, tex, 48) {
 	// Position (3) Color (3) Texture (2)
 	std::vector<float> planeVertices = {
-		-0.5f, 0.0f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, // 0 pos pos pos color color color texCoord texCoord normal normal normal
-		-0.5f, 0.0f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 5.0f, 0.0f, -1.0f, 0.0f, // 1
-		 0.5f, 0.0f, -0.5f, 1.0f, 1.0f, 1.0f, 5.0f, 0.0f, 0.0f, -1.0f, 0.0f, // 2
-		 0.5f, 0.0f,  0.5f, 1.0f, 1.0f, 1.0f, 5.0f, 5.0f, 0.0f, -1.0f, 0.0f  // 3
+		-0.5f, 0.0f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, // 0 pos pos pos color color color texCoord texCoord normal normal normal
+		-0.5f, 0.0f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 5.0f, 0.0f, 1.0f, 0.0f, // 1
+		 0.5f, 0.0f, -0.5f, 1.0f, 1.0f, 1.0f, 5.0f, 0.0f, 0.0f, 1.0f, 0.0f, // 2
+		 0.5f, 0.0f,  0.5f, 1.0f, 1.0f, 1.0f, 5.0f, 5.0f, 0.0f, 1.0f, 0.0f  // 3
 	};
 
 
 	std::vector<unsigned int> indices = {
-		0, 2, 1,
-		1, 2, 3
+		1, 2, 0,
+		3, 2, 1
 	};
 
 	//std::cout << planeVertices[1] << "\n";

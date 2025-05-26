@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Object.h"
+#include "Cube.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 

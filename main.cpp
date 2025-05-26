@@ -97,9 +97,20 @@ int main() {
 
 	Cube(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture);
 
+
+	Cube(glm::vec3(10.0f, 2.325f, 10.5f), glm::vec3(0.0f, 24.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), tileTexture);
+	Cube(glm::vec3(10.05f, 2.725f, 10.43f), glm::vec3(0.0f, -13.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), tileTexture);
+
 	//Cube(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture);
 
-	Light(cubeVertices, indices, glm::vec3(7.0f, 1.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture, 8, glm::vec3(1.0f, 1.0f, 1.0f)); // Color: 1.0f, 1.0f, 0.5f
+	Light(cubeVertices, indices, glm::vec3(7.0f, 1.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture, 8, glm::vec3(1.0f, 1.0f, 1.0f), 3); // Color: 1.0f, 1.0f, 0.5f
+	Light(cubeVertices, indices, glm::vec3(-2.0f, 3.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture, 8, glm::vec3(1.0f, 1.0f, 1.0f), 3); // Color: 1.0f, 1.0f, 0.5f
+	Light(cubeVertices, indices, glm::vec3(10.05f, 3.125f, 10.43f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), tileTexture, 8, glm::vec3(1.0f, 1.0f, 1.0f), 10); // Color: 1.0f, 1.0f, 0.5f
+
+	Light(cubeVertices, indices, glm::vec3(1.0f, 2.0f, 11.73205080757f), glm::vec3(0.0f, -30.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), redTexture, 8, glm::vec3(1.0f, 0.0f, 0.0f), 10); // Color: 1.0f, 1.0f, 0.5f
+	Light(cubeVertices, indices, glm::vec3(0.0f, 2.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), greenTexture, 8, glm::vec3(0.0f, 1.0f, 0.0f), 10); // Color: 1.0f, 1.0f, 0.5f
+	Light(cubeVertices, indices, glm::vec3(-1.0f, 2.0f, 11.73205080757f), glm::vec3(0.0f, 30.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), blueTexture, 8, glm::vec3(0.0f, 0.0f, 1.0f), 10); // Color: 1.0f, 1.0f, 0.5f
+
 
 	if(window != NULL){
 		Renderer::render(window);

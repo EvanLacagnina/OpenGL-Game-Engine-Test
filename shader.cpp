@@ -1,4 +1,5 @@
 #include "shader.h"
+#include "Light.h"
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath) {
 	std::string vertexCode; // Strings to contain vertex and frag shader code
@@ -100,7 +101,7 @@ void Shader::setInt(const std::string& name, int value) const { // We can input 
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
 void Shader::setFloat(const std::string& name, float value) const { // We can input uniforms into our shader
-	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 void Shader::setMat4(const std::string& name, glm::mat4 value) const { // We can input uniforms into our shader
 	glUniformMatrix4fv(glGetUniformLocation(this->ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
@@ -108,3 +109,10 @@ void Shader::setMat4(const std::string& name, glm::mat4 value) const { // We can
 void Shader::setVec3(const std::string& name, glm::vec3 value) const { // We can input uniforms into our shader
 	glUniform3fv(glGetUniformLocation(this->ID, name.c_str()), 1, glm::value_ptr(value));
 }
+void Shader::setFloatArray(const std::string& name, float* value, unsigned int size) const { // We can input uniforms into our shader
+	glUniform1fv(glGetUniformLocation(this->ID, name.c_str()), size, value);
+}
+void Shader::setVec3Array(const std::string& name, glm::vec3* value, unsigned int size) const { // We can input uniforms into our shader
+	glUniform3fv(glGetUniformLocation(this->ID, name.c_str()), size, glm::value_ptr(*value));
+}
+

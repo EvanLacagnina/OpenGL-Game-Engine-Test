@@ -46,11 +46,8 @@ unsigned int Object::getTexture() {
 
 glm::mat4 Object::updateModel() {
 
-	Object::model = glm::translate(Renderer::ID, -this->pos);
-	if(index == 26){
-		std::cout << "(" << Object::pos[0] << ", " << Object::pos[1] << ", " << Object::pos[2] << ")\n";
-		std::cout << "(" << Object::getPos()[0] << ", " << Object::getPos()[1] << ", " << Object::getPos()[2] << ")\n";
-	}
+	Object::model = glm::translate(Renderer::ID, this->pos);
+
 	//Object::rot %= glm::vec3(6.283185307179586476925286766559, 6.283185307179586476925286766559, 6.283185307179586476925286766559);
 	Object::model = glm::rotate(Object::model, glm::radians(Object::rot[0]), glm::vec3(1.0f, 0.0f, 0.0f));
 	Object::model = glm::rotate(Object::model, glm::radians(Object::rot[1]), glm::vec3(0.0f, cos(glm::radians(Object::rot[0])), sin(glm::radians(Object::rot[0]))));

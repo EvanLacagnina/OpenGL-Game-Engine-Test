@@ -20,6 +20,7 @@ float mouseY;
 glm::mat4 Renderer::ID = glm::mat4(1.0f);
 
 void getColor(float count, float vertices[], int len) {
+	
 	float red;
 	float green;
 	float blue;
@@ -257,14 +258,14 @@ int Renderer::render(GLFWwindow* window)
 
 	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	/*glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(2);*/
 
 	float count = 0;
 
@@ -363,7 +364,7 @@ int Renderer::render(GLFWwindow* window)
 			frames = 0;
 			tFrames = 0.0f;
 		}
-
+		
 
 
 		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
@@ -389,22 +390,22 @@ int Renderer::render(GLFWwindow* window)
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-			cameraZ += cameraSpeed * cos(cameraThetaY) * tDiff * cos(cameraThetaX);
-			cameraX += cameraSpeed * cos(cameraThetaY) * tDiff * sin(cameraThetaX);
+			cameraZ += cameraSpeed * cos(cameraThetaY) * tDiff * cos(-cameraThetaX);
+			cameraX += cameraSpeed * cos(cameraThetaY) * tDiff * sin(-cameraThetaX);
 			cameraY += cameraSpeed * tDiff * sin(cameraThetaY);
 		}
 		else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-			cameraZ -= cameraSpeed * cos(cameraThetaY) * tDiff * cos(cameraThetaX);
-			cameraX -= cameraSpeed * cos(cameraThetaY) * tDiff * sin(cameraThetaX);
+			cameraZ -= cameraSpeed * cos(cameraThetaY) * tDiff * cos(-cameraThetaX);
+			cameraX -= cameraSpeed * cos(cameraThetaY) * tDiff * sin(-cameraThetaX);
 			cameraY -= cameraSpeed * tDiff * sin(cameraThetaY);
 		}
 		else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-			cameraZ += cameraSpeed * tDiff * sin(-cameraThetaX);
-			cameraX += cameraSpeed * tDiff * cos(-cameraThetaX);
+			cameraZ += cameraSpeed * tDiff * sin(cameraThetaX);
+			cameraX += cameraSpeed * tDiff * cos(cameraThetaX);
 		}
 		else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-			cameraZ -= cameraSpeed * tDiff * sin(-cameraThetaX);
-			cameraX -= cameraSpeed * tDiff * cos(-cameraThetaX);
+			cameraZ -= cameraSpeed * tDiff * sin(cameraThetaX);
+			cameraX -= cameraSpeed * tDiff * cos(cameraThetaX);
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && esc) {
@@ -480,9 +481,9 @@ int Renderer::render(GLFWwindow* window)
 
 		
 
-		(*Light::getLights(0)).setPos(glm::vec3(9 * cos(lastTime * 2) + 5, 3 * sin(lastTime * 4) + 4, 9 * sin(lastTime * 2) + 5)); // Change light position
+		//(*Light::getLights(0)).setPos(glm::vec3(9 * cos(lastTime * 2) + 5, 3 * sin(lastTime * 4) + 4, 9 * sin(lastTime * 2) + 5)); // Change light position
 		
-		//color = glm::vec3(fmin(abs((fmod(lastTime, 6)) - 3) - 1, 1.0f), fmin(-abs(fmod(lastTime, 6) - 2) + 2, 1.0f), fmin(abs(fmod(lastTime, 6) - 4) - 1, 1.0f));
+		//color = glm::vec3(fmax(fmin(abs((fmod(lastTime, 6)) - 3) - 1, 1.0f), 0.0f), fmax(fmin(-abs(fmod(lastTime, 6) - 2) + 2, 1.0f), 0.0f), fmax(fmin(-abs(fmod(lastTime, 6) - 4) + 2, 1.0f), 0.0f));
 		//(*Light::getLights(0)).setColor(color); // Change light color
 
 		
@@ -506,25 +507,31 @@ int Renderer::render(GLFWwindow* window)
 			model = (*Object::getObjects(i)).updateModel();
 
 			
-			view = glm::rotate(ID, -cameraThetaX, glm::vec3(0.0f, 1.0f, 0.0f));
-			view = glm::rotate(view, cameraThetaY, glm::vec3(cos(-cameraThetaX), 0.0f, sin(-cameraThetaX)));
+			view = glm::rotate(ID, cameraThetaX, glm::vec3(0.0f, 1.0f, 0.0f));
+			view = glm::rotate(view, cameraThetaY, glm::vec3(cos(cameraThetaX), 0.0f, sin(cameraThetaX)));
 			view = glm::translate(view, glm::vec3(cameraX, cameraY, cameraZ));
 			
 			if (!(*Object::getObjects(i)).getIsLight()) {
 				objectShader.use();
 				objectShader.setMat4("model", model);
 				objectShader.setMat4("view", view);
-				objectShader.setVec3("lightColor", (*Light::getLights(0)).getColor());
-				//std::cout << "p\n";
+				//objectShader.setVec3("lightColor", (*Light::getLights(0)).getColor());
+				//std::cout << (*Light::getLights(0)).getColor().x << "\n";
+				objectShader.setFloatArray("lightRadii", &(Light::getLightRadii()[0]), Light::getLights().size());
+				objectShader.setVec3Array("lightPos", &(Light::getLightPos()[0]), Light::getLights().size());
+				objectShader.setVec3Array("lightColors", &(Light::getLightColors()[0]), Light::getLights().size());
+				objectShader.setInt("numLights", Light::getLights().size());
 			}
 			else {
 				lightShader.use();
 				lightShader.setMat4("model", model);
 				lightShader.setMat4("view", view);
 				lightShader.setVec3("lightColor", (*Light::getLights(0)).getColor()); // 
-				//std::cout << "p\n";
+				//std::cout << (*Light::getLights(0)).getColor().x << "\n";
 			}
-			objectShader.setVec3("lightPos", (*Light::getLights(0)).getPos());
+			//objectShader.setVec3("lightPos", (*Light::getLights(0)).getPos());
+			//objectShader.setFloat("lightRadius", (*Light::getLights(0)).getRadius());
+			
 
 
 
