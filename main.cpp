@@ -61,45 +61,45 @@ int main() {
 
 	//objs.push_back(Cube(glm::vec3(1.1f, 0.8f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f), tileTexture));                                       
 
-	Plane(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), tileTexture);
-	Plane(glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), tileTexture);
-	Plane(glm::vec3(10.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), tileTexture);
-	Plane(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), tileTexture);
+	Plane(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), tileTexture, 0.5, 128);
+	Plane(glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), tileTexture, 0.5, 128);
+	Plane(glm::vec3(10.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), tileTexture, 0.5, 128);
+	Plane(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), tileTexture, 0.5, 128);
 
-	Plane(glm::vec3(15.0f, 5.0f, 0.0f), glm::vec3(0.0f, -90.0f, -90.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture);
-	Plane(glm::vec3(15.0f, 5.0f, 10.0f), glm::vec3(0.0f, -90.0f, -90.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture);
+	Plane(glm::vec3(15.0f, 5.0f, 0.0f), glm::vec3(0.0f, -90.0f, -90.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture, 0.0f, 0.0f);
+	Plane(glm::vec3(15.0f, 5.0f, 10.0f), glm::vec3(0.0f, -90.0f, -90.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture, 0.0f, 0.0f);
 
-	Plane(glm::vec3(10.0f, 5.0f, 15.0f), glm::vec3(90.0f, 180.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture);
-	Plane(glm::vec3(0.0f, 5.0f, 15.0f), glm::vec3(90.0f, 180.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture);
+	Plane(glm::vec3(10.0f, 5.0f, 15.0f), glm::vec3(90.0f, 180.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture, 0.0f, 0.0f);
+	Plane(glm::vec3(0.0f, 5.0f, 15.0f), glm::vec3(90.0f, 180.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture, 0.0f, 0.0f);
 
-	Plane(glm::vec3(-5.0f, 5.0f, 10.0f), glm::vec3(0.0f, 90.0f, 90.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture);
-	Plane(glm::vec3(-5.0f, 5.0f, 0.0f), glm::vec3(0.0f, 90.0f, 90.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture);
+	Plane(glm::vec3(-5.0f, 5.0f, 10.0f), glm::vec3(0.0f, 90.0f, 90.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture, 0.0f, 0.0f);
+	Plane(glm::vec3(-5.0f, 5.0f, 0.0f), glm::vec3(0.0f, 90.0f, 90.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture, 0.0f, 0.0f);
 
-	Plane(glm::vec3(0.0f, 5.0f, -5.0f), glm::vec3(90.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture);
-	Plane(glm::vec3(10.0f, 5.0f, -5.0f), glm::vec3(90.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture);
+	Plane(glm::vec3(0.0f, 5.0f, -5.0f), glm::vec3(90.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture, 0.0f, 0.0f);
+	Plane(glm::vec3(10.0f, 5.0f, -5.0f), glm::vec3(90.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), brickTexture, 0.0f, 0.0f);
 
-	Plane(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), ceilingTileTexture);
-	Plane(glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), ceilingTileTexture);
-	Plane(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), ceilingTileTexture);
-	Plane(glm::vec3(0.0f, 10.0f, 10.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), ceilingTileTexture);
+	Plane(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), ceilingTileTexture, 0.0f, 0.0f);
+	Plane(glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), ceilingTileTexture, 0.0f, 0.0f);
+	Plane(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), ceilingTileTexture, 0.0f, 0.0f);
+	Plane(glm::vec3(0.0f, 10.0f, 10.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), ceilingTileTexture, 0.0f, 0.0f);
 
-	Cube(glm::vec3(10.0f, 1.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.25f, 2.0f, 0.25f), woodTexture);
-	Cube(glm::vec3(14.0f, 1.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.25f, 2.0f, 0.25f), woodTexture);
-	Cube(glm::vec3(14.0f, 1.0f, 12.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.25f, 2.0f, 0.25f), woodTexture);
-	Cube(glm::vec3(10.0f, 1.0f, 12.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.25f, 2.0f, 0.25f), woodTexture);
-	Cube(glm::vec3(12.0f, 2.0f, 11.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 0.25f, 3.0f), woodTexture);
+	Cube(glm::vec3(10.0f, 1.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.25f, 2.0f, 0.25f), woodTexture, 0.3f, 16);
+	Cube(glm::vec3(14.0f, 1.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.25f, 2.0f, 0.25f), woodTexture, 0.15f, 16);
+	Cube(glm::vec3(14.0f, 1.0f, 12.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.25f, 2.0f, 0.25f), woodTexture, 0.15f, 16);
+	Cube(glm::vec3(10.0f, 1.0f, 12.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.25f, 2.0f, 0.25f), woodTexture, 0.15f, 16);
+	Cube(glm::vec3(12.0f, 2.0f, 11.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 0.25f, 3.0f), woodTexture, 0.15f, 16);
 
-	Plane(glm::vec3(12.0f, 2.13f, 11.0f), glm::vec3(0.0f, 36.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture);
+	Plane(glm::vec3(12.0f, 2.13f, 11.0f), glm::vec3(0.0f, 36.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture, 0.2f, 28);
 
-	Cube(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 0.1f, 0.1f), redTexture);
-	Cube(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 2.0f, 0.1f), greenTexture);
-	Cube(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 2.0f), blueTexture);
+	Cube(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 0.1f, 0.1f), redTexture, 0.0f, 0.0f);
+	Cube(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 2.0f, 0.1f), greenTexture, 0.0f, 0.0f);
+	Cube(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 2.0f), blueTexture, 0.0f, 0.0f);
 
-	Cube(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture);
+	Cube(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture, 1.0f, 256);
 
 
-	Cube(glm::vec3(10.0f, 2.325f, 10.5f), glm::vec3(0.0f, 24.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), tileTexture);
-	Cube(glm::vec3(10.05f, 2.725f, 10.43f), glm::vec3(0.0f, -13.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), tileTexture);
+	Cube(glm::vec3(10.0f, 2.325f, 10.5f), glm::vec3(0.0f, 24.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), tileTexture, 0.4f, 16);
+	Cube(glm::vec3(10.05f, 2.725f, 10.43f), glm::vec3(0.0f, -13.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), tileTexture, 0.4f, 16);
 
 	//Cube(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture);
 

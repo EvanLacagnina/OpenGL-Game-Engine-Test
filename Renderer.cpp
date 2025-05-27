@@ -521,6 +521,9 @@ int Renderer::render(GLFWwindow* window)
 				objectShader.setVec3Array("lightPos", &(Light::getLightPos()[0]), Light::getLights().size());
 				objectShader.setVec3Array("lightColors", &(Light::getLightColors()[0]), Light::getLights().size());
 				objectShader.setInt("numLights", Light::getLights().size());
+				objectShader.setVec3("cameraPos", glm::vec3(-cameraX, -cameraY, -cameraZ));
+				objectShader.setFloat("specularStrength", (*Object::getObjects(i)).getSpecularStrength());
+				objectShader.setFloat("specularExp", (*Object::getObjects(i)).getSpecularExp());
 			}
 			else {
 				lightShader.use();

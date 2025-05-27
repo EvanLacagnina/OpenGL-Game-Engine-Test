@@ -6,5 +6,5 @@ private:
 	std::vector<float> vertices;
 
 public:
-	Cube(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex);
+	Cube(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, float specStr, float specExp);
 };

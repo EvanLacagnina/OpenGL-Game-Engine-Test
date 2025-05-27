@@ -5,7 +5,7 @@ std::vector<glm::vec3> Light::lightPos;
 std::vector<glm::vec3> Light::lightColors;
 std::vector<float> Light::lightRadii;
 
-Light::Light(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices, glm::vec3 color, float radius) : Object(vertices, indices, pos, rot, scale, tex, numVertices) {
+Light::Light(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices, glm::vec3 color, float radius) : Object(vertices, indices, pos, rot, scale, tex, numVertices, 0.0f, 0.0f) {
 	Object::isLight = true;
 	Light::color = color;
 	Light::radius = radius;

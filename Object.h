@@ -38,8 +38,11 @@ protected:
 
 	bool isLight;
 
+	float specularStrength;
+	float specularExp;
+
 public:
-	Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices);
+	Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices, float specStr, float specExp);
 
 	unsigned int getTexture();
 
@@ -68,4 +71,6 @@ public:
 	unsigned int getVBO();
 	unsigned int getVAO();
 	unsigned int getEBO();
+	float getSpecularStrength();
+	float getSpecularExp();
 };

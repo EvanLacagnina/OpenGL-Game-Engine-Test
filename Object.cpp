@@ -3,7 +3,7 @@
 
 std::vector<Object> Object::objects;
 
-Object::Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices) {
+Object::Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices, float specStr, float specExp) {
 	Object::vertices = vertices;
 	Object::indices = indices;
 	Object::pos = pos;
@@ -12,6 +12,8 @@ Object::Object(std::vector<float> vertices, std::vector<unsigned int> indices, g
 	Object::texture = tex;
 	Object::numVertices = numVertices;
 	Object::isLight = isLight;
+	Object::specularStrength = specStr;
+	Object::specularExp = specExp;
 
 	glGenBuffers(1, &VBO);
 	glGenVertexArrays(1, &VAO);
@@ -128,4 +130,12 @@ unsigned int Object::getVAO() {
 
 unsigned int Object::getEBO() {
 	return Object::EBO;
+}
+
+float Object::getSpecularStrength() {
+	return Object::specularStrength;
+}
+
+float Object::getSpecularExp() {
+	return Object::specularExp;
 }
