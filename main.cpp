@@ -4,7 +4,10 @@
 #include "Texture.h"
 #include "Plane.h"
 #include "Light.h"
+//#include "Window.h"
 
+
+//extern struct Window window;
 
 int main() {
 
@@ -115,5 +118,6 @@ int main() {
 	if(window != NULL){
 		Renderer::render(window);
 	}
+	
 	return 0;
 }

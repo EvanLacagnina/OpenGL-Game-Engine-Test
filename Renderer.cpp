@@ -8,6 +8,7 @@
 #include "stb_image.h"
 #include "Renderer.h"
 #include "Light.h"
+#include "Camera.h"
 
 #include <glm/glm/glm.hpp>
 #include <glm/glm/gtc/matrix_transform.hpp>
@@ -126,13 +127,14 @@ GLFWwindow* Renderer::init() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 
-	GLFWwindow* window = glfwCreateWindow(800, 800, "Last Time", NULL, NULL); 
-	if (window == NULL) { 
+	GLFWwindow* window = glfwCreateWindow(800, 800, "Last Time", NULL, NULL);
+
+	if (window == NULL) {
 		std::cout << "ERROR: GLFW window creation failed\n";
-		glfwTerminate(); 
+		glfwTerminate();
 		return NULL;
 	}
-	glfwMakeContextCurrent(window); 
+	glfwMakeContextCurrent(window);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) { 
 		std::cout << "ERROR: Failed to initialize GLAD\n";
@@ -152,122 +154,12 @@ GLFWwindow* Renderer::init() {
 	
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	
+
 	return window;
 }
 
 int Renderer::render(GLFWwindow* window)
 {
-	
-
-
-	/*float vertices[] = { // Vertecies for an E in NDC
-		/*
-		-0.2f,  0.8f, 0.0f, 1.0f, 1.0f, 1.0f, // 0        0____2_______4
-		-0.2f, -0.8f, 0.0f, 1.0f, 1.0f, 1.0f, // 1        |            |
-		-0.1f,  0.8f, 0.0f, 1.0f, 0.0f, 0.0f, // 2        |    6_______|
-		-0.1f, -0.8f, 0.0f, 0.0f, 0.0f, 1.0f, // 3        |    |       5
-		 0.2f,  0.8f, 0.0f, 1.0f, 0.0f, 0.0f, // 4        |    |_______8
-		 0.2f,  0.6f, 0.0f, 1.0f, 0.0f, 0.0f, // 5        |    7       |
-		-0.1f,  0.6f, 0.0f, 1.0f, 0.0f, 0.0f, // 6        |   10_______|
-		-0.1f,	0.1f, 0.0f, 0.0f, 1.0f, 0.0f, // 7        |    |        9
-		 0.2f,	0.1f, 0.0f, 0.0f, 1.0f, 0.0f, // 8        |    |_______12
-		 0.2f, -0.1f, 0.0f, 0.0f, 1.0f, 0.0f, // 9        |   11       |
-		-0.1f, -0.1f, 0.0f, 0.0f, 1.0f, 0.0f, // 10      1|____3_______|
-		-0.1f, -0.6f, 0.0f, 0.0f, 0.0f, 1.0f, // 11                    13
-		 0.2f, -0.6f, 0.0f, 0.0f, 0.0f, 1.0f, // 12
-		 0.2f, -0.8f, 0.0f, 0.0f, 0.0f, 1.0f  // 13
-		 */
-		 // positions       // colors         // texture coords
-		 //0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-		 //0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
-		//-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, // top left
-		//-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // bottom left
-		/*
-
-		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-
-		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-
-		///////////////////////
-
-		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-
-		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-
-		///////////////////////
-
-		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-
-		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-
-		///////////////////////
-
-		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-
-		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-
-		 ///////////////////////
-
-		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-
-		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-
-		///////////////////////
-
-		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-
-		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
-	}; */
-		
-
-
-
-	//unsigned int VBO;
-	//glGenBuffers(1, &VBO);
-
-	//unsigned int VAO;
-	//glGenVertexArrays(1, &VAO);
-	//glBindVertexArray(VAO);
-
-
-
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-	/*glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);*/
-
-	float count = 0;
 
 	Shader objectShader("vertex.glsl", "objectFragment.glsl");
 	Shader lightShader("vertex.glsl", "lightFragment.glsl");
@@ -290,19 +182,8 @@ int Renderer::render(GLFWwindow* window)
 	projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 10000.0f);
 
 
-	float angle = 0;
-	float angVel = 0;
-	const float friction = 0.001f;
-
 	float lastTime = 0.0f;
 	float tDiff = 0.0f;
-
-	float angAccel = 0.9f;
-
-	int frames = 0;
-	int avgFrameNum = 4000;
-	float avgFPS = 0.0f;
-	float tFrames = 0.0f;
 
 	int windowWidth = 0;
 	int windowHeight = 0;
@@ -312,12 +193,6 @@ int Renderer::render(GLFWwindow* window)
 	float cameraZ = 0;
 	float cameraSpeed = 3.0f;
 	float FOV = 45.0f;
-
-	float w = 4.5f;
-	float d;
-	float c = 0.0f;
-
-	int FOVDir = -1;
 
 	float cameraThetaY = 0;
 	float cameraThetaX = 0;
@@ -334,17 +209,9 @@ int Renderer::render(GLFWwindow* window)
 
 	float diagonalAspect = sqrt(horizontalAspect * horizontalAspect + 1);
 
-	float theta = 0.0f;
-
 	glEnable(GL_DEPTH_TEST);
 
 	glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f);
-
-	//(*Light::getLights(0)).setColor(glm::vec3(1.0f, 1.0f, 1.0f));
-	//(*Light::getLights(0)).setPos(glm::vec3(cos(lastTime * 10), 3.0f, sin(lastTime * 10)));
-	//std::cout << "before setPos\n";
-	//std::cout << "after setPos\n";
-
 	
 	while (!glfwWindowShouldClose(window))
 	{
@@ -355,39 +222,10 @@ int Renderer::render(GLFWwindow* window)
 
 		tDiff = glfwGetTime() - lastTime;
 		lastTime = glfwGetTime();
-
-		tFrames += tDiff;
-		frames += 1;
-		if (frames > avgFrameNum) {
-			avgFPS = frames / tFrames;
-			std::cout << "Framerate: " << avgFPS << " FPS\n";
-			frames = 0;
-			tFrames = 0.0f;
-		}
 		
 
-
-		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-			angVel += angAccel * tDiff;
-		}
-		else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-			angVel -= angAccel * tDiff;
-		}
-		else if (angVel > 0) {
-			angVel -= friction;
-		}
-		else if (angVel < 0) {
-			angVel += friction;
-		}
-		else if (angVel < friction) {
-			angVel = 0;
-		}
-		if (angVel > 13) {
-			angVel = 13;
-		}
-		else if (angVel < -13) {
-			angVel = -13;
-		}
+		std::cout << "FPS: " << 1 / tDiff << "\n";
+		
 
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 			cameraZ += cameraSpeed * cos(cameraThetaY) * tDiff * cos(-cameraThetaX);
@@ -416,17 +254,7 @@ int Renderer::render(GLFWwindow* window)
 			esc = true;
 		}
 
-
-		if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			glDisable(GL_CULL_FACE);
-		} else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_RELEASE) {
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			glEnable(GL_CULL_FACE);
-		}
-
-
-		cameraSpeed += 1 * yScroll;
+		cameraSpeed += yScroll;
 
 		if (cursorLock) {
 			cameraThetaX += 0.5 * (mouseX - (windowWidth / 2)) * tDiff;
@@ -441,23 +269,6 @@ int Renderer::render(GLFWwindow* window)
 		if (yScroll != 0) {
 			yScroll = 0.0f;
 		}
-
-		angVel = 0.5f;
-
-
-		/*if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-			cameraThetaX += glm::radians(20.0f) * tDiff;
-		}
-		else if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
-			cameraThetaX -= glm::radians(20.0f) * tDiff;
-		}
-		else if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
-			cameraThetaY -= glm::radians(20.0f) * tDiff;
-		}
-		else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
-			cameraThetaY += glm::radians(20.0f) * tDiff;
-		}*/
-
 
 
 		projection = glm::perspective(glm::radians(45.0f), ((float)windowWidth) / windowHeight, 0.01f, 500.0f);
@@ -488,11 +299,6 @@ int Renderer::render(GLFWwindow* window)
 
 		
 		for (int i = 0; i < Object::getObjects().size(); i++) {
-
-			//glBufferData(GL_ARRAY_BUFFER, objects.at(i).getVertices().size() * sizeof(float), &objects.at(i).getVertices()[0], GL_STATIC_DRAW);
-			//glBindVertexArray(VAO);
-
-			//std::cout << "Vertices: " << Object::getObjects(i).getVertices().size() << "\n";
 
 			glBindBuffer(GL_ARRAY_BUFFER, (*Object::getObjects(i)).getVBO());
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*Object::getObjects(i)).getEBO());

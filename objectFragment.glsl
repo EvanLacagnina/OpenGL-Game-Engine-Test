@@ -50,11 +50,11 @@ void main() //
 		norm = normalize(Normal); // Normalizes our normal vector
 		lightDir = normalize(lightPos[i] - FragPos); // Finds light direction vector based on light and fragment positions
 
-		diff = max(dot(norm, lightDir), 0.0) * attenuation; // Finds the difference in the normal vector and light direction vector - note that it uses the max() function so it doesn't go below zero
+		//diff = max(dot(norm, lightDir), 0.0) * attenuation; // Finds the difference in the normal vector and light direction vector - note that it uses the max() function so it doesn't go below zero
 
 		//diff = (float(int(diff * 10))) / 10;
 
-		diffuse = diff * lightColors[i]; // Finds the color by multiplying the light color and the difference between the vectors
+		diffuse = max(dot(norm, lightDir), 0.0) * attenuation * lightColors[i]; // Finds the color by multiplying the light color and the difference between the vectors
 		FragColor += vec4(diffuse, 1.0f);
 
 		cameraDir = normalize(cameraPos - FragPos);
