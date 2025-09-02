@@ -1,8 +1,10 @@
 #include "Cube.h"
 
-Cube::Cube(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, float specStr, float specExp) : Object({ 0.0f }, { 0 }, pos, rot, scale, tex, 288, specStr, specExp) {
+Cube::Cube(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, float specStr, float specExp) : Object({ 0.0f }, { 0 }, pos, rot, scale, tex, specStr, specExp) {
 	
 	std::vector<float> cubeVertices = {
+
+		//pos,  pos,   pos, color, color, color, tex, tex, norm,  norm, norm
 		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f,
 		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 0.0f, -1.0f, 0.0f,
 		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 2.0f, 1.0f, 0.0f, -1.0f, 0.0f,

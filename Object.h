@@ -42,7 +42,7 @@ protected:
 	float specularExp;
 
 public:
-	Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices, float specStr, float specExp);
+	Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, float specStr, float specExp);
 
 	unsigned int getTexture();
 
@@ -64,7 +64,6 @@ public:
 	static std::vector<Object> getObjects();
 	static Object* getObjects(int i);
 
-	int getNumVertices();
 	std::vector<float> getVertices();
 	std::vector<unsigned int> getIndices();
 	float getVertex(int i);

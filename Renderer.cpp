@@ -8,7 +8,7 @@
 #include "stb_image.h"
 #include "Renderer.h"
 #include "Light.h"
-#include "Camera.h"
+#include "PointLight.h"
 
 #include <glm/glm/glm.hpp>
 #include <glm/glm/gtc/matrix_transform.hpp>
@@ -155,6 +155,13 @@ GLFWwindow* Renderer::init() {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
+	glGenBuffers(1, Light::getLightUBO());
+	glBindBuffer(GL_UNIFORM_BUFFER, *Light::getLightUBO());
+	glBufferData(GL_UNIFORM_BUFFER, 48 * 32, NULL, GL_STATIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+	glBindBufferBase(GL_UNIFORM_BUFFER, 0, *Light::getLightUBO());
+
 	return window;
 }
 
@@ -165,9 +172,11 @@ int Renderer::render(GLFWwindow* window)
 	Shader lightShader("vertex.glsl", "lightFragment.glsl");
 
 	objectShader.use();
-	glUniform1i(glGetUniformLocation(objectShader.ID, "texture1"), 0);
+	glUniform1i(glGetUniformLocation(objectShader.getShaderID(), "texture1"), 0);
 	lightShader.use();
-	glUniform1i(glGetUniformLocation(lightShader.ID, "texture1"), 0);
+	glUniform1i(glGetUniformLocation(lightShader.getShaderID(), "texture1"), 0);
+
+	glUniformBlockBinding(objectShader.getShaderID(), glGetUniformBlockIndex(objectShader.getShaderID(), "Lights"), 0);
 
 	glm::mat4 ID = glm::mat4(1.0f);
 
@@ -199,6 +208,8 @@ int Renderer::render(GLFWwindow* window)
 
 	bool cursorLock = true;
 	bool esc = false;
+
+	int UBOSize = 0;
 
 
 	yScroll = 0.0f;
@@ -274,13 +285,13 @@ int Renderer::render(GLFWwindow* window)
 		projection = glm::perspective(glm::radians(45.0f), ((float)windowWidth) / windowHeight, 0.01f, 500.0f);
 
 		objectShader.use();
-		glUniformMatrix4fv(glGetUniformLocation(objectShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(glGetUniformLocation(objectShader.getShaderID(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		lightShader.use();
-		glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(glGetUniformLocation(lightShader.getShaderID(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
 		//glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_DEPTH_BUFFER_BIT);
 		
 
 		
@@ -297,6 +308,7 @@ int Renderer::render(GLFWwindow* window)
 		//color = glm::vec3(fmax(fmin(abs((fmod(lastTime, 6)) - 3) - 1, 1.0f), 0.0f), fmax(fmin(-abs(fmod(lastTime, 6) - 2) + 2, 1.0f), 0.0f), fmax(fmin(-abs(fmod(lastTime, 6) - 4) + 2, 1.0f), 0.0f));
 		//(*Light::getLights(0)).setColor(color); // Change light color
 
+		//std::cout << sizeof(float) << " + 2 * " << sizeof(glm::vec3) << " = " << sizeof(PointLightStruct) << "\n";
 		
 		for (int i = 0; i < Object::getObjects().size(); i++) {
 
@@ -323,13 +335,12 @@ int Renderer::render(GLFWwindow* window)
 				objectShader.setMat4("view", view);
 				//objectShader.setVec3("lightColor", (*Light::getLights(0)).getColor());
 				//std::cout << (*Light::getLights(0)).getColor().x << "\n";
-				objectShader.setFloatArray("lightRadii", &(Light::getLightRadii()[0]), Light::getLights().size());
-				objectShader.setVec3Array("lightPos", &(Light::getLightPos()[0]), Light::getLights().size());
-				objectShader.setVec3Array("lightColors", &(Light::getLightColors()[0]), Light::getLights().size());
-				objectShader.setInt("numLights", Light::getLights().size());
-				objectShader.setVec3("cameraPos", glm::vec3(-cameraX, -cameraY, -cameraZ));
+				objectShader.setInt("numLights", PointLight::getPointLights().size());
+				objectShader.setVec3("camera.pos", glm::vec3(-cameraX, -cameraY, -cameraZ));
 				objectShader.setFloat("specularStrength", (*Object::getObjects(i)).getSpecularStrength());
 				objectShader.setFloat("specularExp", (*Object::getObjects(i)).getSpecularExp());
+				glBindBuffer(GL_UNIFORM_BUFFER, *Light::getLightUBO());
+				glBufferSubData(GL_UNIFORM_BUFFER, 0, 32 * PointLight::getPointLightStructs().size(), &(PointLight::getPointLightStructs().at(0)));
 			}
 			else {
 				lightShader.use();
@@ -338,6 +349,9 @@ int Renderer::render(GLFWwindow* window)
 				lightShader.setVec3("lightColor", (*Light::getLights(0)).getColor()); // 
 				//std::cout << (*Light::getLights(0)).getColor().x << "\n";
 			}
+
+			
+
 			//objectShader.setVec3("lightPos", (*Light::getLights(0)).getPos());
 			//objectShader.setFloat("lightRadius", (*Light::getLights(0)).getRadius());
 			

@@ -93,6 +93,10 @@ void Shader::use() {
 	glUseProgram(ID);
 }
 
+unsigned int Shader::getShaderID() {
+	return Shader::ID;
+}
+
 
 void Shader::setBool(const std::string& name, bool value) const { // We can input uniforms into our shader
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
@@ -115,4 +119,3 @@ void Shader::setFloatArray(const std::string& name, float* value, unsigned int s
 void Shader::setVec3Array(const std::string& name, glm::vec3* value, unsigned int size) const { // We can input uniforms into our shader
 	glUniform3fv(glGetUniformLocation(this->ID, name.c_str()), size, glm::value_ptr(*value));
 }
-

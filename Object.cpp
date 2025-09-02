@@ -3,7 +3,7 @@
 
 std::vector<Object> Object::objects;
 
-Object::Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices, float specStr, float specExp) {
+Object::Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, float specStr, float specExp) {
 	Object::vertices = vertices;
 	Object::indices = indices;
 	Object::pos = pos;
@@ -102,10 +102,6 @@ std::vector<Object> Object::getObjects() {
 
 Object* Object::getObjects(int i) {
 	return &objects.at(i);
-}
-
-int Object::getNumVertices() {
-	return numVertices;
 }
 
 std::vector<float> Object::getVertices() {

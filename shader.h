@@ -8,16 +8,22 @@
 #include <glm/glm/glm.hpp>
 #include <glm/glm/gtc/matrix_transform.hpp>
 #include <glm/glm/gtc/type_ptr.hpp>
+#include "PointLight.h"
 
 class Shader
 {
+protected:
+
+	unsigned int ID;
+
 public:
 	// the program ID
-	unsigned int ID;
 	// constructor reads and builds the shader
 	Shader(const char* vertexPath, const char* fragmentPath);
 	// use/activate the shader
 	void use();
+
+	unsigned int getShaderID();
 	// utility uniform functions
 	void setBool(const std::string& name, bool value) const;
 	void setInt(const std::string& name, int value) const;

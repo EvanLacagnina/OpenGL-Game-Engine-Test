@@ -3,19 +3,17 @@
 std::vector<Light> Light::lights;
 std::vector<glm::vec3> Light::lightPos;
 std::vector<glm::vec3> Light::lightColors;
-std::vector<float> Light::lightRadii;
+unsigned int Light::lightUBO;
 
-Light::Light(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, int numVertices, glm::vec3 color, float radius) : Object(vertices, indices, pos, rot, scale, tex, numVertices, 0.0f, 0.0f) {
+Light::Light(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, glm::vec3 color) : Object(vertices, indices, pos, rot, scale, tex, 0.0f, 0.0f) {
 	Object::isLight = true;
 	Light::color = color;
-	Light::radius = radius;
 
 
 	Object::addObject(*this);
 	Light::addLight(*this);
 	Light::lightPos.push_back(pos);
 	Light::lightColors.push_back(color);
-	Light::lightRadii.push_back(radius);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -36,10 +34,6 @@ glm::vec3 Light::getPos() {
 	return Object::getPos();
 }
 
-float Light::getRadius() {
-	return Light::radius;
-}
-
 std::vector<Light> Light::getLights() {
 	return Light::lights;
 }
@@ -56,10 +50,6 @@ std::vector<glm::vec3> Light::getLightColors() {
 	return Light::lightColors;
 }
 
-std::vector<float> Light::getLightRadii() {
-	return Light::lightRadii;
-}
-
 void Light::addLight(Light light) {
 	Light::lights.push_back(light);
 }
@@ -72,4 +62,8 @@ void Light::setPos (glm::vec3 pos) {
 void Light::setColor(glm::vec3 color) {
 	this->color = color;
 	(*Object::getObjects(index)).setColor(color);
+}
+
+unsigned int* Light::getLightUBO() {
+	return &Light::lightUBO;
 }
