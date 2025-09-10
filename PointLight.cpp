@@ -24,3 +24,8 @@ void PointLight::addPointLight(PointLight pointLight) {
 std::vector<PointLightStruct> PointLight::getPointLightStructs() {
 	return PointLight::pointLightStructs;
 }
+
+objType PointLight::getObjType() {
+	//std::cout << "M";
+	return POINTLIGHT;
+}

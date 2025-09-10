@@ -8,7 +8,7 @@ struct PointLightStruct {
 	float radius;
 };
 
-class PointLight : Light {
+class PointLight : public Light {
 
 protected:
 	static std::vector<PointLight> pointLights; 
@@ -23,4 +23,6 @@ public:
 	static void addPointLight(PointLight pointLight);
 
 	static std::vector<PointLightStruct> getPointLightStructs();
+
+	objType getObjType() override;
 };

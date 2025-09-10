@@ -1,7 +1,7 @@
 #include "Object.h"
 #include "Renderer.h"
 
-std::vector<Object> Object::objects;
+std::vector<Object*> Object::objects;
 
 Object::Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, float specStr, float specExp) {
 	Object::vertices = vertices;
@@ -10,8 +10,6 @@ Object::Object(std::vector<float> vertices, std::vector<unsigned int> indices, g
 	Object::rot = rot;
 	Object::scale = scale;
 	Object::texture = tex;
-	Object::numVertices = numVertices;
-	Object::isLight = isLight;
 	Object::specularStrength = specStr;
 	Object::specularExp = specExp;
 
@@ -36,10 +34,13 @@ Object::Object(std::vector<float> vertices, std::vector<unsigned int> indices, g
 	glEnableVertexAttribArray(3);
 
 	glBufferData(GL_ARRAY_BUFFER, Object::vertices.size() * sizeof(float), &Object::vertices[0], GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, (*Object::getObjects(i)).getVertices().size() * sizeof(float), &(*Object::getObjects().at(i)).getVertices()[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, Object::indices.size() * sizeof(unsigned int), &Object::indices[0], GL_STATIC_DRAW);
+
+
+	//Object::verticesChanged = true;
 	
 	index = objects.size();
-
-	Object::isLight = false;
 }
 
 unsigned int Object::getTexture() {
@@ -51,11 +52,13 @@ glm::mat4 Object::updateModel() {
 	Object::model = glm::translate(Renderer::ID, this->pos);
 
 	//Object::rot %= glm::vec3(6.283185307179586476925286766559, 6.283185307179586476925286766559, 6.283185307179586476925286766559);
+	//Object::model = glm::rotate(Renderer::ID, glm::radians(Object::rot[0]), glm::vec3(1.0f, 0.0f, 0.0f));
 	Object::model = glm::rotate(Object::model, glm::radians(Object::rot[0]), glm::vec3(1.0f, 0.0f, 0.0f));
 	Object::model = glm::rotate(Object::model, glm::radians(Object::rot[1]), glm::vec3(0.0f, cos(glm::radians(Object::rot[0])), sin(glm::radians(Object::rot[0]))));
 	Object::model = glm::rotate(Object::model, glm::radians(Object::rot[2]), glm::vec3(cos(glm::radians(Object::rot[0])) * sin(glm::radians(Object::rot[1])), sin(glm::radians(Object::rot[0])), cos(glm::radians(Object::rot[0])) * cos(glm::radians(Object::rot[1]))));
 	//std::cout << "(" << 
 
+	//Object::model = glm::translate(Object::model, this->pos);
 
 	Object::model = glm::scale(Object::model, Object::scale);
 
@@ -78,7 +81,13 @@ void Object::setColor(glm::vec3 color) {
 	
 }
 
-void Object::addObject(Object obj) {
+void Object::setVerticesChanged(bool changed) {
+	Object::verticesChanged = changed;
+}
+
+void Object::addObject(Object* obj) {
+
+	//std::cout << obj->getObjType() << "\n";
 	objects.push_back(obj);
 }
 
@@ -92,16 +101,17 @@ glm::vec3 Object::getScale() {
 	return Object::scale;
 }
 
-bool Object::getIsLight() {
-	return Object::isLight;
+objType Object::getObjType() {
+	//std::cout << "M";
+	return OBJECT;
 }
 
-std::vector<Object> Object::getObjects() {
+std::vector<Object*> Object::getObjects() {
 	return objects;
 }
 
 Object* Object::getObjects(int i) {
-	return &objects.at(i);
+	return objects.at(i);
 }
 
 std::vector<float> Object::getVertices() {
@@ -134,4 +144,8 @@ float Object::getSpecularStrength() {
 
 float Object::getSpecularExp() {
 	return Object::specularExp;
+}
+
+bool Object::getVerticesChanged() {
+	return Object::verticesChanged;
 }

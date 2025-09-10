@@ -23,7 +23,16 @@ Plane::Plane(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, fl
 	//std::cout << Plane::vertices[1] << "\n";
 	//std::cout << Object::getVertices().size() << "\n";
 
-	Object::addObject(*this);
+	//std::cout << this->getObjType() << "\n";
 
+	Object::addObject(this);
+
+	glBufferData(GL_ARRAY_BUFFER, Object::vertices.size() * sizeof(float), &Object::vertices[0], GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, (*Object::getObjects(i)).getVertices().size() * sizeof(float), &(*Object::getObjects().at(i)).getVertices()[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, Object::indices.size() * sizeof(unsigned int), &Object::indices[0], GL_STATIC_DRAW);
 	
+}
+
+objType Plane::getObjType() {
+	return PLANE;
 }

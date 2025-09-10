@@ -67,7 +67,11 @@ Cube::Cube(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, floa
 	Object::indices = indices;
 
 	//Object::objects
-	Object::addObject(*this);
+	Object::addObject(this);
+
+	glBufferData(GL_ARRAY_BUFFER, Object::vertices.size() * sizeof(float), &Object::vertices[0], GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, (*Object::getObjects(i)).getVertices().size() * sizeof(float), &(*Object::getObjects().at(i)).getVertices()[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, Object::indices.size() * sizeof(unsigned int), &Object::indices[0], GL_STATIC_DRAW);
 
 
 	//Vertices
@@ -104,4 +108,8 @@ Cube::Cube(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, floa
 
 		6, 10, 13,
 		6, 13, 9*/
+}
+
+objType Cube::getObjType() {
+	return CUBE;
 }

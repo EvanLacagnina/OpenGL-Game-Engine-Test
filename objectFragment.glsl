@@ -14,21 +14,25 @@ struct pointLight{
 
 struct dirLight{
 	vec3 pos;
+	float brightness;
 	vec3 rot;
 	vec3 color;
 	vec3 dir;
 	vec3 size;
+	mat4 invRot;
 };
 
 struct Camera{
 	vec3 pos;
 };
 
-uniform int numLights;
+uniform int numPointLights;
+uniform int numDirLights;
 
 layout (std140) uniform Lights
 {
 	pointLight pointLights[32];
+	dirLight dirLights[32];
 };
 
 uniform Camera camera;
@@ -50,13 +54,14 @@ void main() //
 	vec3 lightDir;
 	vec3 cameraDir;
 	vec3 reflectDir;
+	vec3 fragPosObjSpace = vec3(0.0f);
 	float diff;
 	float spec;
 	vec3 diffuse;
 	FragColor = vec4(0.0f);
 	//vec3 lightPos = vec3(2.0f, -1.0f, 1.0f);
 	// FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 1.0) * vec4(ourColor, 0.0); // round(TexCoord * 50) / 50)
-	for(int i = 0; i < numLights; i++){
+	for(int i = 0; i < numPointLights; i++){
 		distance = distance(pointLights[i].pos, FragPos); //float(int(distance(lightPos, FragPos) / 2)) * 2;
 
 		rad = pointLights[i].radius / 0.315631605917;
@@ -80,6 +85,27 @@ void main() //
 
 		spec = pow(max(dot(cameraDir, reflectDir), 0.0), specularExp);
 		FragColor += vec4(max(spec * pointLights[i].color * specularStrength, 0.0f), 1.0f);
+
+		//diffuse = max(dot(norm, -dirLights[i].dir), 0.0) * dirLights[i].color;
+		//FragColor += vec4(diffuse, 1.0f);
+		//FragColor = vec4(-dirLights[i].dir, 0.0);
+	}
+
+	for(int i = 0; i < numDirLights; i++){
+		fragPosObjSpace = vec3(dirLights[i].invRot * (vec4(FragPos, 1.0f) - vec4(dirLights[i].pos, 1.0f)));
+		//if(fragPosObjSpace.x < dirLights[i].size.x / 2.0f && fragPosObjSpace.x > -dirLights[i].size.x / 2.0f && fragPosObjSpace.y < dirLights[i].size.y / 2.0f && fragPosObjSpace.y > -dirLights[i].size.y / 2.0f && fragPosObjSpace.z < dirLights[i].size.z / 2.0f && fragPosObjSpace.z > -dirLights[i].size.z / 2.0f){
+		if(fragPosObjSpace.x < dirLights[i].size.x / 2.0f && fragPosObjSpace.x > -dirLights[i].size.x / 2.0f && fragPosObjSpace.y < dirLights[i].size.y && fragPosObjSpace.y > 0.0f && fragPosObjSpace.z < dirLights[i].size.z / 2.0f && fragPosObjSpace.z > -dirLights[i].size.z / 2.0f){
+			diffuse = max(dot(norm, -dirLights[i].dir), 0.0) * dirLights[i].color * dirLights[i].brightness;
+			FragColor += vec4(diffuse, 1.0f);
+			
+			spec = pow(max(dot(cameraDir, -dirLights[i].dir), 0.0), specularExp);
+			FragColor += vec4(max(spec * dirLights[i].color * specularStrength * dirLights[i].brightness, 0.0f), 1.0f);
+			//FragColor += vec4(vec3(spec) * dirLights[i].color * specularStrength, 1.0f);
+		}
+		//FragColor = vec4(fragPosObjSpace, 1.0f);
+		//FragColor = vec4(dirLights[i].size, 1.0f);
+		//FragColor = vec4(vec3(dirLights[i].size.y / 40), 1.0f);
+		//FragColor = vec4(vec3(fragPosObjSpace.y / 40), 1.0f);
 	}
 
 	FragColor += ambientStrength;

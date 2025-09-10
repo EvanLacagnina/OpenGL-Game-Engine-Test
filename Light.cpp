@@ -1,19 +1,18 @@
 #include "Light.h"
 
-std::vector<Light> Light::lights;
-std::vector<glm::vec3> Light::lightPos;
-std::vector<glm::vec3> Light::lightColors;
+std::vector<std::shared_ptr<Light>> Light::lights;
+//std::vector<glm::vec3> Light::lightPos;
+//std::vector<glm::vec3> Light::lightColors;
 unsigned int Light::lightUBO;
 
 Light::Light(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, glm::vec3 color) : Object(vertices, indices, pos, rot, scale, tex, 0.0f, 0.0f) {
-	Object::isLight = true;
 	Light::color = color;
 
 
-	Object::addObject(*this);
+	Object::addObject(this);
 	Light::addLight(*this);
-	Light::lightPos.push_back(pos);
-	Light::lightColors.push_back(color);
+	//Light::lightPos.push_back(pos);
+	//Light::lightColors.push_back(color);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -34,24 +33,24 @@ glm::vec3 Light::getPos() {
 	return Object::getPos();
 }
 
-std::vector<Light> Light::getLights() {
+std::vector<std::shared_ptr<Light>> Light::getLights() {
 	return Light::lights;
 }
 
-Light* Light::getLights(int i) {
-	return &Light::lights.at(i);
+std::shared_ptr<Light> Light::getLights(int i) {
+	return Light::lights.at(i);
 }
 
-std::vector<glm::vec3> Light::getLightPos() {
-	return Light::lightPos;
-}
-
-std::vector<glm::vec3> Light::getLightColors() {
-	return Light::lightColors;
-}
+//std::vector<glm::vec3> Light::getLightPos() {
+//	return Light::lightPos;
+//}
+//
+//std::vector<glm::vec3> Light::getLightColors() {
+//	return Light::lightColors;
+//}
 
 void Light::addLight(Light light) {
-	Light::lights.push_back(light);
+	Light::lights.push_back(std::make_shared<Light>(light));
 }
 
 void Light::setPos (glm::vec3 pos) {
@@ -66,4 +65,9 @@ void Light::setColor(glm::vec3 color) {
 
 unsigned int* Light::getLightUBO() {
 	return &Light::lightUBO;
+}
+
+objType Light::getObjType() {
+	std::cout << "M";
+	return POINTLIGHT;
 }

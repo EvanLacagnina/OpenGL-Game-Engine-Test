@@ -9,6 +9,14 @@
 //#include "Object.h"
 //#include <GLFW/glfw3.h>
 
+enum objType {
+	OBJECT,
+	CUBE,
+	PLANE,
+	POINTLIGHT,
+	DIRLIGHT
+};
+
 class Object 
 {
 private:
@@ -32,14 +40,15 @@ protected:
 	unsigned int VAO;
 	unsigned int EBO;
 
-	static std::vector<Object> objects, lights;
+	static std::vector<Object*> objects, lights;
 
 	int index;
 
-	bool isLight;
-
 	float specularStrength;
 	float specularExp;
+
+	bool verticesChanged;
+
 
 public:
 	Object(std::vector<float> vertices, std::vector<unsigned int> indices, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, unsigned int tex, float specStr, float specExp);
@@ -52,16 +61,15 @@ public:
 	void setRot(glm::vec3 rot);
 	void setScale(glm::vec3 scale);
 	void setColor(glm::vec3 color);
+	void setVerticesChanged(bool changed);
 
-	static void addObject(Object obj);
+	static void addObject(Object* obj);
 
 	glm::vec3 getPos();
 	glm::vec3 getRot();
 	glm::vec3 getScale();
 
-	bool getIsLight();
-
-	static std::vector<Object> getObjects();
+	static std::vector<Object*> getObjects();
 	static Object* getObjects(int i);
 
 	std::vector<float> getVertices();
@@ -72,4 +80,7 @@ public:
 	unsigned int getEBO();
 	float getSpecularStrength();
 	float getSpecularExp();
+	bool getVerticesChanged();
+
+	virtual objType getObjType();
 };

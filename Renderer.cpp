@@ -9,6 +9,7 @@
 #include "Renderer.h"
 #include "Light.h"
 #include "PointLight.h"
+#include "DirectionalLight.h"
 
 #include <glm/glm/glm.hpp>
 #include <glm/glm/gtc/matrix_transform.hpp>
@@ -223,13 +224,19 @@ int Renderer::render(GLFWwindow* window)
 	glEnable(GL_DEPTH_TEST);
 
 	glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f);
+
 	
 	while (!glfwWindowShouldClose(window))
 	{
 
+
+		DirectionalLight::updateDirLights();
+
 		//std::cout << (*Light::getLights(0)).getColor().z << "\n";
 
 		glfwGetWindowSize(window, &windowWidth, &windowHeight);
+
+		projection = glm::perspective(glm::radians(45.0f), ((float)windowWidth) / windowHeight, 0.01f, 500.0f);
 
 		tDiff = glfwGetTime() - lastTime;
 		lastTime = glfwGetTime();
@@ -282,7 +289,6 @@ int Renderer::render(GLFWwindow* window)
 		}
 
 
-		projection = glm::perspective(glm::radians(45.0f), ((float)windowWidth) / windowHeight, 0.01f, 500.0f);
 
 		objectShader.use();
 		glUniformMatrix4fv(glGetUniformLocation(objectShader.getShaderID(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
@@ -291,7 +297,7 @@ int Renderer::render(GLFWwindow* window)
 
 		//glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); 
-		glClear(GL_DEPTH_BUFFER_BIT);
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		
 
 		
@@ -315,9 +321,11 @@ int Renderer::render(GLFWwindow* window)
 			glBindBuffer(GL_ARRAY_BUFFER, (*Object::getObjects(i)).getVBO());
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*Object::getObjects(i)).getEBO());
 			glBindVertexArray((*Object::getObjects(i)).getVAO());
-			glBufferData(GL_ARRAY_BUFFER, (*Object::getObjects(i)).getVertices().size() * sizeof(float), &Object::getObjects().at(i).getVertices()[0], GL_STATIC_DRAW);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (*Object::getObjects(i)).getIndices().size() * sizeof(unsigned int), &Object::getObjects().at(i).getIndices()[0], GL_STATIC_DRAW);
-
+			//if((*Object::getObjects(i)).getVerticesChanged()){
+			glBufferData(GL_ARRAY_BUFFER, (*Object::getObjects(i)).getVertices().size() * sizeof(float), &(*Object::getObjects().at(i)).getVertices()[0], GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (*Object::getObjects(i)).getIndices().size() * sizeof(unsigned int), &(*Object::getObjects().at(i)).getIndices()[0], GL_STATIC_DRAW);
+				//(*Object::getObjects(i)).setVerticesChanged(false);
+			//}
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, (*Object::getObjects(i)).getTexture());
 
@@ -329,25 +337,39 @@ int Renderer::render(GLFWwindow* window)
 			view = glm::rotate(view, cameraThetaY, glm::vec3(cos(cameraThetaX), 0.0f, sin(cameraThetaX)));
 			view = glm::translate(view, glm::vec3(cameraX, cameraY, cameraZ));
 			
-			if (!(*Object::getObjects(i)).getIsLight()) {
+			if (!((*Object::getObjects(i)).getObjType() == POINTLIGHT) && !((*Object::getObjects(i)).getObjType() == DIRLIGHT)) {
 				objectShader.use();
 				objectShader.setMat4("model", model);
 				objectShader.setMat4("view", view);
 				//objectShader.setVec3("lightColor", (*Light::getLights(0)).getColor());
 				//std::cout << (*Light::getLights(0)).getColor().x << "\n";
-				objectShader.setInt("numLights", PointLight::getPointLights().size());
+				objectShader.setInt("numPointLights", PointLight::getPointLights().size());
+				objectShader.setInt("numDirLights", DirectionalLight::getDirLights().size());
 				objectShader.setVec3("camera.pos", glm::vec3(-cameraX, -cameraY, -cameraZ));
 				objectShader.setFloat("specularStrength", (*Object::getObjects(i)).getSpecularStrength());
 				objectShader.setFloat("specularExp", (*Object::getObjects(i)).getSpecularExp());
 				glBindBuffer(GL_UNIFORM_BUFFER, *Light::getLightUBO());
-				glBufferSubData(GL_UNIFORM_BUFFER, 0, 32 * PointLight::getPointLightStructs().size(), &(PointLight::getPointLightStructs().at(0)));
+				if(PointLight::getPointLightStructs().size() != 0){
+					glBufferSubData(GL_UNIFORM_BUFFER, 0, 32 * PointLight::getPointLightStructs().size(), &(PointLight::getPointLightStructs().at(0)));
+				}
+
+				glBufferSubData(GL_UNIFORM_BUFFER, 32 * PointLight::getPointLightStructs().size() * 32, 134 * DirectionalLight::getDirLightStructs().size(), (DirectionalLight::getDirLightStructs().at(0)));
+				
+				//std::cout << "(" << DirectionalLight::getDirLightStructs().at(0)->dir.x << ", " << DirectionalLight::getDirLightStructs().at(0)->dir.y << ", " << DirectionalLight::getDirLightStructs().at(0)->dir.z << ")\n";
+			}
+			else if (!((*Object::getObjects(i)).getObjType() == DIRLIGHT)) {
+				lightShader.use();
+				lightShader.setMat4("model", model);
+				lightShader.setMat4("view", view);
+				lightShader.setVec3("lightColor", (*Light::getLights(0)).getColor()); // 
+				//std::cout << (*Light::getLights(0)).getColor().x << "\n";
 			}
 			else {
 				lightShader.use();
 				lightShader.setMat4("model", model);
 				lightShader.setMat4("view", view);
 				lightShader.setVec3("lightColor", (*Light::getLights(0)).getColor()); // 
-				//std::cout << (*Light::getLights(0)).getColor().x << "\n";
+				//std::cout << "M" << "\n";
 			}
 
 			
