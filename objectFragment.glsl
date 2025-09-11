@@ -59,6 +59,7 @@ void main() //
 	float spec;
 	vec3 diffuse;
 	FragColor = vec4(0.0f);
+	norm = normalize(Normal);cameraDir = normalize(camera.pos - FragPos);
 	//vec3 lightPos = vec3(2.0f, -1.0f, 1.0f);
 	// FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 1.0) * vec4(ourColor, 0.0); // round(TexCoord * 50) / 50)
 	for(int i = 0; i < numPointLights; i++){
@@ -70,7 +71,7 @@ void main() //
 		
 		//FragColor = vec4(1.0f);
 
-		norm = normalize(Normal); // Normalizes our normal vector
+		//norm = normalize(Normal); // Normalizes our normal vector
 		lightDir = normalize(pointLights[i].pos - FragPos); // Finds light direction vector based on light and fragment positions
 
 		//diff = max(dot(norm, lightDir), 0.0) * attenuation; // Finds the difference in the normal vector and light direction vector - note that it uses the max() function so it doesn't go below zero
@@ -80,7 +81,6 @@ void main() //
 		diffuse = max(dot(norm, lightDir), 0.0) * attenuation * pointLights[i].color; // Finds the color by multiplying the light color and the difference between the vectors
 		FragColor += vec4(diffuse, 1.0f);
 
-		cameraDir = normalize(camera.pos - FragPos);
 		reflectDir = reflect(-lightDir, norm);
 
 		spec = pow(max(dot(cameraDir, reflectDir), 0.0), specularExp);
@@ -93,19 +93,25 @@ void main() //
 
 	for(int i = 0; i < numDirLights; i++){
 		fragPosObjSpace = vec3(dirLights[i].invRot * (vec4(FragPos, 1.0f) - vec4(dirLights[i].pos, 1.0f)));
-		//if(fragPosObjSpace.x < dirLights[i].size.x / 2.0f && fragPosObjSpace.x > -dirLights[i].size.x / 2.0f && fragPosObjSpace.y < dirLights[i].size.y / 2.0f && fragPosObjSpace.y > -dirLights[i].size.y / 2.0f && fragPosObjSpace.z < dirLights[i].size.z / 2.0f && fragPosObjSpace.z > -dirLights[i].size.z / 2.0f){
+		//if(fragPosObjSpace.x < dirLights[i].size.x / 2.0f && fragPosObjSpace.x > -dirLights[i].size.x / 2.0f && fragPosObjSpace.y < dirLights[i].size.y && fragPosObjSpace.y > 0.0f && fragPosObjSpace.z < dirLights[i].size.z / 2.0f && fragPosObjSpace.z > -dirLights[i].size.z / 2.0f){
 		if(fragPosObjSpace.x < dirLights[i].size.x / 2.0f && fragPosObjSpace.x > -dirLights[i].size.x / 2.0f && fragPosObjSpace.y < dirLights[i].size.y && fragPosObjSpace.y > 0.0f && fragPosObjSpace.z < dirLights[i].size.z / 2.0f && fragPosObjSpace.z > -dirLights[i].size.z / 2.0f){
-			diffuse = max(dot(norm, -dirLights[i].dir), 0.0) * dirLights[i].color * dirLights[i].brightness;
+			diffuse = max(dot(norm, -dirLights[i].dir), 0.0f) * dirLights[i].color * dirLights[i].brightness;
 			FragColor += vec4(diffuse, 1.0f);
 			
-			spec = pow(max(dot(cameraDir, -dirLights[i].dir), 0.0), specularExp);
+			spec = pow(max(dot(cameraDir, reflect(dirLights[i].dir, norm)), 0.0f), specularExp);
 			FragColor += vec4(max(spec * dirLights[i].color * specularStrength * dirLights[i].brightness, 0.0f), 1.0f);
 			//FragColor += vec4(vec3(spec) * dirLights[i].color * specularStrength, 1.0f);
+			//FragColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);
 		}
 		//FragColor = vec4(fragPosObjSpace, 1.0f);
+		//FragColor = vec4(FragPos / 30.0f, 1.0f);
 		//FragColor = vec4(dirLights[i].size, 1.0f);
 		//FragColor = vec4(vec3(dirLights[i].size.y / 40), 1.0f);
 		//FragColor = vec4(vec3(fragPosObjSpace.y / 40), 1.0f);
+		//FragColor = vec4(1.0f, 0.0f, 1.0f, 1.0f);
+		//FragColor = (vec4(FragPos, 1.0f) - vec4(dirLights[i].pos, 1.0f));
+		//FragColor = vec4(dirLights[i].pos, 1.0f);
+		//FragColor = vec4(dirLights[i].brightness);
 	}
 
 	FragColor += ambientStrength;

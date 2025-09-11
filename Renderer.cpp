@@ -352,9 +352,11 @@ int Renderer::render(GLFWwindow* window)
 				if(PointLight::getPointLightStructs().size() != 0){
 					glBufferSubData(GL_UNIFORM_BUFFER, 0, 32 * PointLight::getPointLightStructs().size(), &(PointLight::getPointLightStructs().at(0)));
 				}
-
-				glBufferSubData(GL_UNIFORM_BUFFER, 32 * PointLight::getPointLightStructs().size() * 32, 134 * DirectionalLight::getDirLightStructs().size(), (DirectionalLight::getDirLightStructs().at(0)));
-				
+				//std::cout << DirectionalLight::getDirLightStructs().size() << "\n";
+				if(DirectionalLight::getDirLightStructs().size() != 0){
+					glBufferSubData(GL_UNIFORM_BUFFER, 32 * 32, 134 * DirectionalLight::getDirLightStructs().size(), (DirectionalLight::getDirLightStructs().at(0)));
+					//std::cout << "M\n";
+				}
 				//std::cout << "(" << DirectionalLight::getDirLightStructs().at(0)->dir.x << ", " << DirectionalLight::getDirLightStructs().at(0)->dir.y << ", " << DirectionalLight::getDirLightStructs().at(0)->dir.z << ")\n";
 			}
 			else if (!((*Object::getObjects(i)).getObjType() == DIRLIGHT)) {

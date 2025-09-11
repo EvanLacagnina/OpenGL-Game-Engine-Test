@@ -122,7 +122,7 @@ int main() {
 
 	//Cube(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture);
 
-	new PointLight(cubeVertices, indices, glm::vec3(7.0f, 1.0f, 3.0f), glm::vec3(30.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture, glm::vec3(1.0f, 1.0f, 1.0f), 30); // Color: 1.0f, 1.0f, 0.5f
+	//new PointLight(cubeVertices, indices, glm::vec3(7.0f, 1.0f, 3.0f), glm::vec3(30.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture, glm::vec3(1.0f, 1.0f, 1.0f), 30); // Color: 1.0f, 1.0f, 0.5f
 	//new PointLight(cubeVertices, indices, glm::vec3(-2.0f, 3.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), tileTexture, glm::vec3(1.0f, 1.0f, 1.0f), 3); // Color: 1.0f, 1.0f, 0.5f
 	//new PointLight(cubeVertices, indices, glm::vec3(10.05f, 3.125f, 10.43f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), tileTexture, glm::vec3(1.0f, 1.0f, 1.0f), 10); // Color: 1.0f, 1.0f, 0.5f
 	//
